@@ -17,7 +17,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/incidents', {
+        const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const incidents = res.data;
