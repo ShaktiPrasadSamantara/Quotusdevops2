@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Box, IconButton } from '@mui/mater
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = ({ onToggleMode, mode }) => {
   const { user, logout } = useAuth();
@@ -29,7 +29,7 @@ const Navbar = ({ onToggleMode, mode }) => {
           sx={{ flexGrow: 1, cursor: 'pointer' }}
           onClick={goHome}
         >
-          Sentra
+          PortCALM
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

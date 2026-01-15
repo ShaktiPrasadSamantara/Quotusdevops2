@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const connectDB = require('./src/config/db');
 
 dotenv.config();
 
@@ -15,9 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/incidents', require('./routes/incidentRoutes'));
-app.use('/api/awareness', require('./routes/awarenessRoutes'));
+app.use('/api/auth', require('./src/routes/authRoutes'));
+// app.use('/api/incidents', require('./routes/incidentRoutes'));
+// app.use('/api/awareness', require('./routes/awarenessRoutes'));
 
 
 // Test route

@@ -12,7 +12,7 @@ import StaffDashboard from './pages/StaffDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminIncidentsPage from './pages/AdminIncidentsPage';
 import AwarenessHubPage from './pages/AwarenessHubPage';
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 import getTheme from './theme';
 
 function App() {

@@ -82,6 +82,7 @@ const ReportIncidentPage = () => {
         <Typography variant="body2" color="text.secondary" mb={2}>
           Submit details of an incident. You can choose to report anonymously.
         </Typography>
+
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             label="Title"
@@ -92,6 +93,7 @@ const ReportIncidentPage = () => {
             onChange={handleChange}
             required
           />
+
           <TextField
             label="Description"
             name="description"
@@ -103,16 +105,27 @@ const ReportIncidentPage = () => {
             onChange={handleChange}
             required
           />
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+
+          {/* Category & Priority */}
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} sm={8}>
+              <Typography variant="caption" color="text.secondary">
+                Category
+              </Typography>
               <TextField
                 select
-                label="Category"
                 name="category"
-                fullWidth
-                margin="normal"
                 value={form.category}
                 onChange={handleChange}
+                fullWidth
+                size="small"
+                sx={{
+                  mt: 0.5,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    height: 44,
+                  },
+                }}
                 required
               >
                 {categories.map((cat) => (
@@ -122,15 +135,25 @@ const ReportIncidentPage = () => {
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={12} sm={4}>
+              <Typography variant="caption" color="text.secondary">
+                Priority
+              </Typography>
               <TextField
                 select
-                label="Priority"
                 name="priority"
-                fullWidth
-                margin="normal"
                 value={form.priority}
                 onChange={handleChange}
+                fullWidth
+                size="small"
+                sx={{
+                  mt: 0.5,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    height: 44,
+                  },
+                }}
               >
                 {priorities.map((p) => (
                   <MenuItem key={p} value={p}>
@@ -140,6 +163,8 @@ const ReportIncidentPage = () => {
               </TextField>
             </Grid>
           </Grid>
+
+
           <TextField
             label="Location"
             name="location"
@@ -148,6 +173,7 @@ const ReportIncidentPage = () => {
             value={form.location}
             onChange={handleChange}
           />
+
           <TextField
             label="Incident Date"
             name="incidentDate"
@@ -159,7 +185,7 @@ const ReportIncidentPage = () => {
             onChange={handleChange}
           />
 
-          <Box mt={2}>
+          {/* <Box mt={2}>
             <label>
               <input
                 type="checkbox"
@@ -169,7 +195,7 @@ const ReportIncidentPage = () => {
               />{' '}
               Report anonymously
             </label>
-          </Box>
+          </Box> */}
 
           <Button
             type="submit"

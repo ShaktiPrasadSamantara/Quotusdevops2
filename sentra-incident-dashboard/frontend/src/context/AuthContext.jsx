@@ -3,14 +3,50 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // { _id, name, email, role }
-  const [token, setToken] = useState(localStorage.getItem('sentraToken') || '');
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() => localStorage.getItem('sentraToken') || '');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) return;
-    // Optional: call /api/auth/me here later
-  }, [token]);
+    const initialize = () => {
+      const savedToken = localStorage.getItem('sentraToken');
+      const savedUser = localStorage.getItem('sentraUser');
+
+      if (!savedToken || !savedUser) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(savedUser);
+
+        // Optional: basic JWT expiration check (client-side)
+        try {
+          const payload = JSON.parse(atob(savedToken.split('.')[1]));
+          if (payload.exp * 1000 < Date.now()) {
+            console.warn('Token expired — clearing session');
+            localStorage.removeItem('sentraToken');
+            localStorage.removeItem('sentraUser');
+            setLoading(false);
+            return;
+          }
+        } catch {
+          // malformed token → ignore expiration check
+        }
+
+        setUser(parsed);
+        setToken(savedToken);
+      } catch (err) {
+        console.error('Invalid auth data in localStorage', err);
+        localStorage.removeItem('sentraToken');
+        localStorage.removeItem('sentraUser');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initialize();
+  }, []);
 
   const login = (userData, jwtToken) => {
     setUser(userData);
@@ -26,20 +62,19 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('sentraUser');
   };
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem('sentraUser');
-    const savedToken = localStorage.getItem('sentraToken');
-    if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
-      setToken(savedToken);
-    }
-  }, []);
+  const value = { user, token, login, logout, loading };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, setLoading }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
