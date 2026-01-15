@@ -13,11 +13,12 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const categories = [
-  'Bullying',
-  'Harassment',
-  'Discrimination',
-  'Safety Hazard',
-  'Other',
+  'Wordpress Website',
+  'Blog Post',
+  'Newsletter',
+  'CALM',
+  'Port CALM',
+  'Shield'
 ];
 
 const priorities = ['Low', 'Medium', 'High', 'Critical'];

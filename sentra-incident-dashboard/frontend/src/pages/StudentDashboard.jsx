@@ -8,7 +8,7 @@ const StudentDashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Student Dashboard - PortCALM
+        User Dashboard - PortCALM
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>

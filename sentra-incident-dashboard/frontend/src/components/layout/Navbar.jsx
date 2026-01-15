@@ -29,7 +29,7 @@ const Navbar = ({ onToggleMode, mode }) => {
           sx={{ flexGrow: 1, cursor: 'pointer' }}
           onClick={goHome}
         >
-          PortCALM
+          PortCALM IMS
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -40,7 +40,7 @@ const Navbar = ({ onToggleMode, mode }) => {
           {user && (
             <>
               <Typography variant="body2">
-                {user.role.toUpperCase()}
+                {user.name.toUpperCase()}
               </Typography>
               <Button color="inherit" onClick={handleLogout}>
                 Logout
