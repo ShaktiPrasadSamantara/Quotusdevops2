@@ -112,10 +112,12 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
+      const res = await axios.get('http://localhost:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const incidents = res.data;
+
+      console.log("admin Token", token);
 
       const total = incidents.length;
       const pending = incidents.filter((i) => i.status === 'Pending').length;

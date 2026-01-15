@@ -23,32 +23,32 @@ const StaffDashboard = () => {
   const { token, user } = useAuth();
   const [incidents, setIncidents] = useState([]);
 
-  useEffect(() => {
-    const fetchAssignedIncidents = async () => {
-      try {
-        const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const all = res.data;
+ useEffect(() => {
+  const fetchAssignedIncidents = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/incidents', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-        // Show only incidents assigned to this staff user
-        const assigned = all.filter(
-          (inc) =>
-            inc.assignedTo &&
-            inc.assignedTo._id &&
-            user &&
-            inc.assignedTo._id === user._id
-        );
-        setIncidents(res.data);
-      } catch (error) {
-        console.error('Error fetching staff incidents', error.message);
+      console.log('Staff received incidents:', res.data.length);
+      if (res.data.length > 0) {
+        console.log('First incident:', res.data[0]);
+        console.log('Assigned to ID:', res.data[0].assignedTo?._id);
       }
-    };
 
-    if (token && user) {
-      fetchAssignedIncidents();
+      setIncidents(res.data);
+
+    } catch (error) {
+      console.error('Staff fetch error:', error?.response?.data || error.message);
     }
-  }, [token, user]);
+  };
+
+  if (token && user?._id) {
+    fetchAssignedIncidents();
+  }
+}, [token, user]);
+
+    
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>

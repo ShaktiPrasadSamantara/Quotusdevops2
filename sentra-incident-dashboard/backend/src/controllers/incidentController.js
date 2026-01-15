@@ -18,22 +18,23 @@ const getMyIncidents = async (req, res, next) => {
   }
 };
 
-const getAllIncidents = async (req, res, next) => {
+const getIncidents = async (req, res, next) => {
   try {
-    const { status, category, priority } = req.query;
-    const filters = {};
-    if (status) filters.status = status;
-    if (category) filters.category = category;
-    if (priority) filters.priority = priority;
+    const incidents = await incidentService.getIncidentsForUser(req.user);
 
-    const incidents = await incidentService.getAllIncidents(filters);
-
-    // Optional: clean ObjectId → string if frontend expects it
-    const cleaned = incidents.map(i => ({
-      ...i.toObject(),
-      reporter: i.reporter?._id?.toString() || null,
-      assignedTo: i.assignedTo?._id?.toString() || null,
-    }));
+    // Clean up for frontend: convert populated fields to more usable format
+    const cleaned = incidents.map((i) => {
+      const obj = i.toObject();
+      return {
+        ...obj,
+        reporter: i.reporter
+          ? { ...i.reporter.toObject(), _id: i.reporter._id.toString() }
+          : null,
+        assignedTo: i.assignedTo
+          ? { ...i.assignedTo.toObject(), _id: i.assignedTo._id.toString() }
+          : null,
+      };
+    });
 
     res.json(cleaned);
   } catch (error) {
@@ -41,7 +42,7 @@ const getAllIncidents = async (req, res, next) => {
   }
 };
 
-const getIncident = async (req, res, next) => {
+const getIncidentById = async (req, res, next) => {
   try {
     const incident = await incidentService.getIncidentById(req.params.id, req.user);
     res.json(incident);
@@ -71,8 +72,8 @@ const assignIncident = async (req, res, next) => {
 module.exports = {
   createIncident,
   getMyIncidents,
-  getAllIncidents,
-  getIncident,
+  getIncidents,          // ← this is the main list endpoint now
+  getIncidentById,
   updateIncidentStatus,
   assignIncident,
 };

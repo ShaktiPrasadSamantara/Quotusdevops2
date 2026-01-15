@@ -4,30 +4,30 @@ const router = express.Router();
 const {
   createIncident,
   getMyIncidents,
-  getAllIncidents,
-  getIncident,
+  getIncidents,
+  getIncidentById,
   updateIncidentStatus,
   assignIncident,
 } = require('../controllers/incidentController');
 
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// Student / Staff: create incident
+// Create incident (authenticated users: student/staff)
 router.post('/', protect, createIncident);
 
-// Student / Staff: view own incidents
+// Get own reported incidents (student/staff)
 router.get('/my', protect, getMyIncidents);
 
-// Staff / Admin: list all with filters
-router.get('/', protect, authorize('staff', 'admin'), getAllIncidents);
+// Get incidents based on role (admin sees all, staff sees assigned)
+router.get('/', protect, authorize('staff', 'admin'), getIncidents);
 
-// View single incident (role-aware)
-router.get('/:id', protect, getIncident);
+// Get single incident (with role-based visibility check)
+router.get('/:id', protect, getIncidentById);
 
-// Staff / Admin: change status
+// Update status (staff + admin)
 router.patch('/:id/status', protect, authorize('staff', 'admin'), updateIncidentStatus);
 
-// Admin only: assign to staff
+// Assign to staff (admin only)
 router.patch('/:id/assign', protect, authorize('admin'), assignIncident);
 
 module.exports = router;

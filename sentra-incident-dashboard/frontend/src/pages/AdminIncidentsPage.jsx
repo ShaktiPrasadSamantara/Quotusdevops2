@@ -66,7 +66,7 @@ const AdminIncidentsPage = () => {
 
   const fetchIncidents = async () => {
     try {
-      const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
+      const res = await axios.get('http://localhost:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
         params: filters,
       });
@@ -84,10 +84,23 @@ const AdminIncidentsPage = () => {
   }, [token]);
 
   useEffect(() => {
-    setStaffUsers([
-      { _id: '693441d8333a87eb861dd9ff', name: 'Staff One', email: 'staff@sentra.com' },
-    ]);
-  }, []);
+  const fetchStaff = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/auth/staff', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log('Fetched real staff:', res.data);
+      setStaffUsers(res.data);
+    } catch (err) {
+      console.error('Failed to fetch staff users:', err.response?.data || err);
+      // Optional fallback or show error to admin
+    }
+  };
+
+  if (token) {
+    fetchStaff();
+  }
+}, [token]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -113,7 +126,7 @@ const AdminIncidentsPage = () => {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(
-        `http://13.205.179.91:5000/api/incidents/${id}/status`,
+        `http://localhost:5000/api/incidents/${id}/status`,
         { status },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -131,7 +144,7 @@ const AdminIncidentsPage = () => {
       if (!staffId) return;
 
       const response = await axios.patch(
-        `http://13.205.179.91:5000/api/incidents/${incidentId}/assign`,
+        `http://localhost:5000/api/incidents/${incidentId}/assign`,
         { assignedTo: staffId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -572,7 +585,7 @@ const AdminIncidentsPage = () => {
                   <TableCell>
                     {inc.isAnonymous || !inc.reporter
                       ? <Chip label="Anonymous" size="small" variant="outlined" />
-                      : inc.reporter.email}
+                      : inc.reporter.name}
                   </TableCell>
                   <TableCell>
                     <Chip label={inc.category} size="small" variant="outlined" />
@@ -593,7 +606,7 @@ const AdminIncidentsPage = () => {
                     />
                   </TableCell>
                   <TableCell>
-                    {inc.assignedTo?.email ||
+                    {inc.assignedTo?.name ||
                       <Typography variant="body2" color="text.secondary" fontStyle="italic">
                         Not assigned
                       </Typography>

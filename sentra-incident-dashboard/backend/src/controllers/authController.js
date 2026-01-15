@@ -1,12 +1,14 @@
 const authService = require('../services/authService');
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
   try {
     const userData = await authService.register(req.body);
     res.status(201).json(userData);
   } catch (error) {
-    next(error);
-  }
+    return res.status(400).json({
+      success: false,
+      error: error.message || 'Registration failed'
+  })}
 };
 
 const login = async (req, res, next) => {

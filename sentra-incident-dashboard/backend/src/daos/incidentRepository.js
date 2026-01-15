@@ -54,6 +54,18 @@ class IncidentRepository {
     ).exec();
   }
 
+
+  // repositories/incidentRepository.js
+
+async findByAssignedTo(userId) {
+  return await Incident.find({ assignedTo: userId })
+    .sort({ createdAt: -1 })
+    .populate('reporter', 'name email role')
+    .populate('assignedTo', 'name email role')
+    .exec();
+}
+
+
   async existsById(id) {
     return !!(await Incident.countDocuments({ _id: id }));
   }

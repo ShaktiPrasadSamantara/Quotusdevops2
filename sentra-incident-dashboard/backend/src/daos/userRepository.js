@@ -15,6 +15,13 @@ class UserRepository {
     return await query.exec();
   }
 
+  async findByRole(role) {
+  return await User.find({ role })
+    .select('_id name email role')
+    .sort({ name: 1 })
+    .exec();
+}
+
   /**
    * Find user by ID (without password by default)
    * @param {string} id
