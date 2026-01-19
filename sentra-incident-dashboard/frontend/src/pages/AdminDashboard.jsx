@@ -1203,7 +1203,7 @@ const AdminDashboard = () => {
             </Card>
 
             {/* Awareness Hub */}
-            <Card sx={{
+            {/* <Card sx={{
               borderRadius: 3,
               border: `1px solid ${colors.borderGray}`,
               background: `linear-gradient(135deg, ${alpha(colors.blue, 0.08)} 0%, ${alpha(colors.blue, 0.12)} 100%)`,
@@ -1284,7 +1284,7 @@ const AdminDashboard = () => {
                   Access Resources
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
           </Grid>
         </Grid>
 
