@@ -14,6 +14,9 @@ import AdminIncidentsPage from './pages/AdminIncidentsPage';
 import AwarenessHubPage from './pages/AwarenessHubPage';
 import Navbar from './components/layout/Navbar';
 import getTheme from './theme';
+import UserCreationForm from './pages/userCreate'; 
+import AdminCreationForm from './pages/adminCreation';
+
 
 function App() {
   const [mode, setMode] = useState('light');
@@ -94,6 +97,20 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            // In your App.js or router configuration
+            <Route path="/user-creation" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <UserCreationForm />
+              </ProtectedRoute>
+            } />
+
+
+            <Route path="/admin-creation" element={
+             
+                <AdminCreationForm />
+           
+            } />
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

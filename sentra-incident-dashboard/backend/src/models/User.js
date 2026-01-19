@@ -33,15 +33,19 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash password before save
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+// Hash password before save - modern async/await style (no next!)
+userSchema.pre('save', async function () {
+  // 'this' is the document being saved
+  if (!this.isModified('password')) {
+    return;  // ← just return, no next()
+  }
 
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
+    // No next() needed – Mongoose waits for this promise
   } catch (err) {
-    next(err);
+    throw err;  // ← or next(err) if you must, but throw is cleaner in async
   }
 });
 

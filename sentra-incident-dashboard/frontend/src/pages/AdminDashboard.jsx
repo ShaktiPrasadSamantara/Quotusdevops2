@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Container, 
-  Grid, 
-  Paper, 
-  Button, 
-  Typography, 
-  Box, 
+import {
+  Container,
+  Grid,
+  Paper,
+  Button,
+  Typography,
+  Box,
   Card,
   CardContent,
   LinearProgress,
@@ -28,11 +28,11 @@ import {
   CardActions,
   Skeleton
 } from '@mui/material';
-import { 
-  FileText, 
-  Clock, 
-  AlertCircle, 
-  CheckCircle, 
+import {
+  FileText,
+  Clock,
+  AlertCircle,
+  CheckCircle,
   Shield,
   BarChart3,
   Users,
@@ -75,7 +75,7 @@ const AdminDashboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
+
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
     avgResolutionTime: '2.5',
     satisfactionRate: 94
   });
-  
+
   const [loading, setLoading] = useState(true);
   const [recentActivity, setRecentActivity] = useState([]);
   const [systemStatus, setSystemStatus] = useState({
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
         storage: Math.min(100, prev.storage + 0.1)
       }));
     }, 60000);
-    
+
     return () => clearInterval(interval);
   }, [token]);
 
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
       avgResolutionTime: '2.5',
       satisfactionRate: 94
     });
-    
+
     setRecentActivity([
       { id: 1, title: 'Unauthorized Access Attempt', category: 'Security', status: 'In Review', createdAt: new Date().toISOString() },
       { id: 2, title: 'Network Connectivity Issue', category: 'Infrastructure', status: 'Pending', createdAt: new Date(Date.now() - 86400000).toISOString() },
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
   };
 
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Pending': return colors.blue;
       case 'In Review': return '#f59e0b';
       case 'Resolved': return '#10b981';
@@ -177,7 +177,7 @@ const AdminDashboard = () => {
   };
 
   const getStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Pending': return <Clock size={14} />;
       case 'In Review': return <AlertCircle size={14} />;
       case 'Resolved': return <CheckCircle size={14} />;
@@ -264,7 +264,7 @@ const AdminDashboard = () => {
     const now = new Date();
     const diffMs = now - date;
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) {
       return 'Today, ' + date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     } else if (diffDays === 1) {
@@ -272,15 +272,15 @@ const AdminDashboard = () => {
     } else if (diffDays < 7) {
       return `${diffDays} days ago`;
     }
-    
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
       day: 'numeric',
     });
   };
 
   const getSystemStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'operational':
       case 'connected':
         return '#10b981';
@@ -294,7 +294,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <Box sx={{ 
+    <Box sx={{
       backgroundColor: colors.lightGray,
       minHeight: '100vh',
       py: { xs: 1.5, sm: 3 }
@@ -302,18 +302,18 @@ const AdminDashboard = () => {
       <Container maxWidth="xl" sx={{ px: { xs: 1.5, sm: 2, md: 3 } }}>
         {/* Header Section */}
         <Box sx={{ mb: { xs: 2, md: 4 } }}>
-          <Stack 
-            direction={{ xs: 'column', sm: 'row' }} 
-            justifyContent="space-between" 
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            justifyContent="space-between"
             alignItems={{ xs: 'flex-start', sm: 'center' }}
             spacing={{ xs: 1.5, sm: 0 }}
             sx={{ mb: 2 }}
           >
             <Box sx={{ width: { xs: '100%', sm: 'auto' } }}>
-              <Typography 
-                variant={isMobile ? "h5" : "h4"} 
-                sx={{ 
-                  fontWeight: 700, 
+              <Typography
+                variant={isMobile ? "h5" : "h4"}
+                sx={{
+                  fontWeight: 700,
                   color: colors.darkBlue,
                   mb: 0.5,
                   fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2.125rem' }
@@ -321,9 +321,9 @@ const AdminDashboard = () => {
               >
                 Security Incident Dashboard
               </Typography>
-              <Typography 
-                variant="body2" 
-                sx={{ 
+              <Typography
+                variant="body2"
+                sx={{
                   color: colors.darkGray,
                   fontSize: { xs: '0.75rem', sm: '0.875rem' }
                 }}
@@ -331,18 +331,18 @@ const AdminDashboard = () => {
                 Comprehensive overview of security incidents and system performance metrics
               </Typography>
             </Box>
-            <Stack 
-              direction="row" 
+            <Stack
+              direction="row"
               spacing={1}
-              sx={{ 
+              sx={{
                 width: { xs: '100%', sm: 'auto' },
                 mt: { xs: 1, sm: 0 }
               }}
             >
               <Tooltip title="Refresh Dashboard Data">
-                <IconButton 
+                <IconButton
                   onClick={fetchDashboardData}
-                  sx={{ 
+                  sx={{
                     border: `1px solid ${colors.borderGray}`,
                     borderRadius: 1.5,
                     backgroundColor: colors.white,
@@ -359,9 +359,10 @@ const AdminDashboard = () => {
               </Tooltip>
               <Button
                 variant="contained"
-                startIcon={<Download size={isMobile ? 14 : 16} />}
-                sx={{ 
-                  borderRadius: 1.5, 
+                // startIcon={<Download size={isMobile ? 14 : 16} />}
+                onClick={() => navigate('/user-creation')} // Add this line
+                sx={{
+                  borderRadius: 1.5,
                   px: { xs: 2, sm: 3 },
                   py: { xs: 1, sm: 1.25 },
                   backgroundColor: colors.blue,
@@ -374,7 +375,7 @@ const AdminDashboard = () => {
                   flexShrink: 0
                 }}
               >
-                {isMobile ? 'Export' : 'Export Report'}
+                {isMobile ? 'Export' : 'create user'}
               </Button>
             </Stack>
           </Stack>
@@ -382,10 +383,10 @@ const AdminDashboard = () => {
         </Box>
 
         {/* Stats Overview Cards - Equal Width Grid */}
-        <Grid 
-          container 
-          spacing={{ xs: 1.5, sm: 2, md: 3 }} 
-          sx={{ 
+        <Grid
+          container
+          spacing={{ xs: 1.5, sm: 2, md: 3 }}
+          sx={{
             mb: { xs: 2, md: 4 },
             '& .MuiGrid-item': {
               display: 'flex'
@@ -393,30 +394,30 @@ const AdminDashboard = () => {
           }}
         >
           {statCards.map((card) => (
-            <Grid 
-              item 
-              xs={12} 
-              sm={6} 
-              lg={3} 
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              lg={3}
               key={card.title}
-              sx={{ 
+              sx={{
                 minHeight: { xs: 'auto', sm: 140 },
                 height: '100%'
               }}
             >
               {loading ? (
-                <Skeleton 
-                  variant="rectangular" 
+                <Skeleton
+                  variant="rectangular"
                   height={140}
-                  sx={{ 
+                  sx={{
                     borderRadius: 3,
                     backgroundColor: alpha(colors.darkBlue, 0.1),
                     width: '100%'
                   }}
                 />
               ) : (
-                <Card 
-                  sx={{ 
+                <Card
+                  sx={{
                     borderRadius: 3,
                     border: `1px solid ${colors.borderGray}`,
                     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
@@ -433,18 +434,18 @@ const AdminDashboard = () => {
                     }
                   }}
                 >
-                  <CardContent 
-                    sx={{ 
+                  <CardContent
+                    sx={{
                       p: { xs: 1.5, sm: 2, md: 2.5 },
                       flex: 1,
                       display: 'flex',
                       flexDirection: 'column'
                     }}
                   >
-                    <Stack 
-                      direction="row" 
-                      justifyContent="space-between" 
-                      alignItems="flex-start" 
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
                       sx={{ mb: { xs: 1.5, sm: 2 } }}
                     >
                       <Avatar
@@ -477,9 +478,9 @@ const AdminDashboard = () => {
                           }}
                           icon={card.trendIcon}
                         />
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
+                        <Typography
+                          variant="caption"
+                          sx={{
                             color: colors.darkGray,
                             display: 'block',
                             fontSize: { xs: '0.625rem', sm: '0.75rem' }
@@ -489,25 +490,25 @@ const AdminDashboard = () => {
                         </Typography>
                       </Box>
                     </Stack>
-                    <Typography 
-                      variant={isMobile ? "h5" : "h4"} 
-                      sx={{ 
-                        fontWeight: 700, 
+                    <Typography
+                      variant={isMobile ? "h5" : "h4"}
+                      sx={{
+                        fontWeight: 700,
                         mb: 0.5,
                         color: colors.darkBlue,
-                        fontSize: { 
-                          xs: '1.5rem', 
-                          sm: '1.75rem', 
-                          md: '2rem' 
+                        fontSize: {
+                          xs: '1.5rem',
+                          sm: '1.75rem',
+                          md: '2rem'
                         },
                         lineHeight: 1.2
                       }}
                     >
                       {card.value}
                     </Typography>
-                    <Typography 
-                      variant="subtitle2" 
-                      sx={{ 
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
                         fontWeight: 600,
                         color: colors.darkBlue,
                         mb: 0.5,
@@ -516,9 +517,9 @@ const AdminDashboard = () => {
                     >
                       {card.title}
                     </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
+                    <Typography
+                      variant="caption"
+                      sx={{
                         color: colors.darkGray,
                         fontSize: { xs: '0.6875rem', sm: '0.75rem' },
                         mt: 'auto'
@@ -538,35 +539,35 @@ const AdminDashboard = () => {
           {/* Left Column - Main Content */}
           <Grid item xs={12} lg={8}>
             {/* Performance Metrics */}
-            <Card sx={{ 
-              borderRadius: 1.5, 
-              mb: { xs: 2, md: 3 }, 
+            <Card sx={{
+              borderRadius: 1.5,
+              mb: { xs: 2, md: 3 },
               border: `1px solid ${colors.borderGray}`,
               backgroundColor: colors.white,
               overflow: 'hidden'
             }}>
               <CardContent sx={{ p: { xs: 1.5, sm: 1.5, md: 1.5 } }}>
-                <Stack 
-                  direction={{ xs: 'column', sm: 'row' }} 
-                  justifyContent="space-between" 
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  justifyContent="space-between"
                   alignItems={{ xs: 'flex-start', sm: 'center' }}
                   spacing={{ xs: 1, sm: 0 }}
                   sx={{ mb: 3 }}
                 >
                   <Box>
-                    <Typography 
-                      variant="h6" 
-                      sx={{ 
-                        fontWeight: 700, 
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
                         color: colors.darkBlue,
                         fontSize: { xs: '1rem', sm: '1.125rem' }
                       }}
                     >
                       Resolution Performance
                     </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
+                    <Typography
+                      variant="caption"
+                      sx={{
                         color: colors.darkGray,
                         fontSize: { xs: '0.75rem', sm: '0.8125rem' }
                       }}
@@ -577,16 +578,16 @@ const AdminDashboard = () => {
                   <Chip
                     label={`${stats.percentageResolved}% Success Rate`}
                     sx={{
-                      backgroundColor: stats.percentageResolved > 80 
-                        ? alpha('#10b981', 0.1) 
-                        : stats.percentageResolved > 60 
-                        ? alpha('#f59e0b', 0.1) 
-                        : alpha('#ef4444', 0.1),
-                      color: stats.percentageResolved > 80 
-                        ? '#10b981' 
-                        : stats.percentageResolved > 60 
-                        ? '#f59e0b' 
-                        : '#ef4444',
+                      backgroundColor: stats.percentageResolved > 80
+                        ? alpha('#10b981', 0.1)
+                        : stats.percentageResolved > 60
+                          ? alpha('#f59e0b', 0.1)
+                          : alpha('#ef4444', 0.1),
+                      color: stats.percentageResolved > 80
+                        ? '#10b981'
+                        : stats.percentageResolved > 60
+                          ? '#f59e0b'
+                          : '#ef4444',
                       fontWeight: 600,
                       border: 'none',
                       fontSize: { xs: '0.75rem', sm: '0.8125rem' },
@@ -595,23 +596,23 @@ const AdminDashboard = () => {
                     size="small"
                   />
                 </Stack>
-                
+
                 <Box sx={{ mb: 3 }}>
                   <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        color: colors.darkGray, 
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: colors.darkGray,
                         fontWeight: 500,
                         fontSize: { xs: '0.8125rem', sm: '0.875rem' }
                       }}
                     >
                       Resolution Progress
                     </Typography>
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 600,
                         color: colors.darkBlue,
                         fontSize: { xs: '0.8125rem', sm: '0.875rem' }
                       }}
@@ -619,10 +620,10 @@ const AdminDashboard = () => {
                       {stats.percentageResolved}%
                     </Typography>
                   </Stack>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={stats.percentageResolved} 
-                    sx={{ 
+                  <LinearProgress
+                    variant="determinate"
+                    value={stats.percentageResolved}
+                    sx={{
                       height: { xs: 6, sm: 8 },
                       borderRadius: 1.5,
                       backgroundColor: alpha(colors.blue, 0.1),
@@ -636,19 +637,19 @@ const AdminDashboard = () => {
 
                 <Grid container spacing={{ xs: 1, sm: 2 }}>
                   <Grid item xs={6}>
-                    <Box sx={{ 
-                      p: { xs: 1.5, sm: 2 }, 
-                      borderRadius: 1.5, 
+                    <Box sx={{
+                      p: { xs: 1.5, sm: 2 },
+                      borderRadius: 1.5,
                       border: `1px solid ${alpha(colors.blue, 0.2)}`,
                       backgroundColor: alpha(colors.blue, 0.03),
                       height: '100%'
                     }}>
                       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
                         <Clock size={isMobile ? 14 : 16} color={colors.blue} />
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
-                            color: colors.darkGray, 
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: colors.darkGray,
                             fontWeight: 500,
                             fontSize: { xs: '0.75rem', sm: '0.8125rem' }
                           }}
@@ -656,10 +657,10 @@ const AdminDashboard = () => {
                           Avg. Resolution Time
                         </Typography>
                       </Stack>
-                      <Typography 
-                        variant="h6" 
-                        sx={{ 
-                          fontWeight: 700, 
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 700,
                           color: colors.darkBlue,
                           fontSize: { xs: '1rem', sm: '1.125rem' }
                         }}
@@ -669,19 +670,19 @@ const AdminDashboard = () => {
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Box sx={{ 
-                      p: { xs: 1.5, sm: 2 }, 
-                      borderRadius: 1.5, 
+                    <Box sx={{
+                      p: { xs: 1.5, sm: 2 },
+                      borderRadius: 1.5,
                       border: `1px solid ${alpha('#10b981', 0.2)}`,
                       backgroundColor: alpha('#10b981', 0.03),
                       height: '100%'
                     }}>
                       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
                         <CheckCircle size={isMobile ? 14 : 16} color="#10b981" />
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
-                            color: colors.darkGray, 
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: colors.darkGray,
                             fontWeight: 500,
                             fontSize: { xs: '0.75rem', sm: '0.8125rem' }
                           }}
@@ -689,10 +690,10 @@ const AdminDashboard = () => {
                           Satisfaction Rate
                         </Typography>
                       </Stack>
-                      <Typography 
-                        variant="h6" 
-                        sx={{ 
-                          fontWeight: 700, 
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 700,
                           color: colors.darkBlue,
                           fontSize: { xs: '1rem', sm: '1.125rem' }
                         }}
@@ -706,37 +707,37 @@ const AdminDashboard = () => {
             </Card>
 
             {/* Recent Incidents Table */}
-            <Card sx={{ 
-              borderRadius: 1.5, 
+            <Card sx={{
+              borderRadius: 1.5,
               border: `1px solid ${colors.borderGray}`,
               backgroundColor: colors.white,
               overflow: 'hidden'
             }}>
-              <Box sx={{ 
-                p: { xs: 1.5, sm: 2, md: 3 }, 
+              <Box sx={{
+                p: { xs: 1.5, sm: 2, md: 3 },
                 borderBottom: `1px solid ${colors.borderGray}`,
                 backgroundColor: alpha(colors.darkBlue, 0.02)
               }}>
-                <Stack 
-                  direction={{ xs: 'column', sm: 'row' }} 
-                  justifyContent="space-between" 
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  justifyContent="space-between"
                   alignItems={{ xs: 'flex-start', sm: 'center' }}
                   spacing={{ xs: 1, sm: 0 }}
                 >
                   <Box>
-                    <Typography 
-                      variant="h6" 
-                      sx={{ 
-                        fontWeight: 700, 
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
                         color: colors.darkBlue,
                         fontSize: { xs: '1rem', sm: '1.125rem' }
                       }}
                     >
                       Recent Incidents
                     </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
+                    <Typography
+                      variant="caption"
+                      sx={{
                         color: colors.darkGray,
                         fontSize: { xs: '0.75rem', sm: '0.8125rem' }
                       }}
@@ -745,9 +746,9 @@ const AdminDashboard = () => {
                     </Typography>
                   </Box>
                   <Stack direction="row" spacing={1} sx={{ mt: { xs: 1, sm: 0 } }}>
-                    <IconButton 
+                    <IconButton
                       size="small"
-                      sx={{ 
+                      sx={{
                         border: `1px solid ${colors.borderGray}`,
                         borderRadius: 1.5,
                         p: { xs: 0.5, sm: 0.75 }
@@ -755,11 +756,11 @@ const AdminDashboard = () => {
                     >
                       <Filter size={isMobile ? 14 : 16} />
                     </IconButton>
-                    <Button 
-                      size="small" 
+                    <Button
+                      size="small"
                       endIcon={<ChevronRight size={isMobile ? 14 : 16} />}
                       onClick={() => navigate('/admin/incidents')}
-                      sx={{ 
+                      sx={{
                         color: colors.blue,
                         fontWeight: 600,
                         fontSize: { xs: '0.75rem', sm: '0.8125rem' },
@@ -776,7 +777,7 @@ const AdminDashboard = () => {
               <TableContainer>
                 <Table sx={{ minWidth: 300 }}>
                   <TableHead>
-                    <TableRow sx={{ 
+                    <TableRow sx={{
                       backgroundColor: alpha(colors.darkBlue, 0.02),
                       '& th': {
                         borderBottom: `1px solid ${colors.borderGray}`,
@@ -792,7 +793,7 @@ const AdminDashboard = () => {
                       {!isMobile && <TableCell>Category</TableCell>}
                       <TableCell>Status</TableCell>
                       {!isMobile && <TableCell>Date Reported</TableCell>}
-                      <TableCell align="right">Actions</TableCell>
+                      {/* <TableCell align="right">Actions</TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -809,9 +810,9 @@ const AdminDashboard = () => {
                       ))
                     ) : (
                       recentActivity.map((incident, index) => (
-                        <TableRow 
+                        <TableRow
                           key={index}
-                          sx={{ 
+                          sx={{
                             '&:hover': { backgroundColor: alpha(colors.blue, 0.02) },
                             cursor: 'pointer',
                             '& td': {
@@ -824,10 +825,10 @@ const AdminDashboard = () => {
                         >
                           {!isMobile && (
                             <TableCell>
-                              <Typography 
-                                variant="body2" 
-                                sx={{ 
-                                  color: colors.darkGray, 
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  color: colors.darkGray,
                                   fontWeight: 500,
                                   fontSize: { xs: '0.75rem', sm: '0.875rem' }
                                 }}
@@ -837,10 +838,10 @@ const AdminDashboard = () => {
                             </TableCell>
                           )}
                           <TableCell>
-                            <Typography 
-                              variant="body2" 
-                              sx={{ 
-                                fontWeight: 500, 
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                fontWeight: 500,
                                 color: colors.darkBlue,
                                 fontSize: { xs: '0.75rem', sm: '0.875rem' }
                               }}
@@ -848,10 +849,10 @@ const AdminDashboard = () => {
                               {incident.title}
                             </Typography>
                             {isMobile && (
-                              <Typography 
-                                variant="caption" 
-                                sx={{ 
-                                  color: colors.darkGray, 
+                              <Typography
+                                variant="caption"
+                                sx={{
+                                  color: colors.darkGray,
                                   display: 'block',
                                   fontSize: '0.75rem'
                                 }}
@@ -898,9 +899,9 @@ const AdminDashboard = () => {
                             <TableCell>
                               <Stack direction="row" alignItems="center" spacing={1}>
                                 <Calendar size={14} color={colors.darkGray} />
-                                <Typography 
-                                  variant="body2" 
-                                  sx={{ 
+                                <Typography
+                                  variant="body2"
+                                  sx={{
                                     color: colors.darkGray,
                                     fontSize: { xs: '0.75rem', sm: '0.875rem' }
                                   }}
@@ -910,7 +911,7 @@ const AdminDashboard = () => {
                               </Stack>
                             </TableCell>
                           )}
-                          <TableCell align="right">
+                          {/* <TableCell align="right">
                             <Tooltip title="View Details">
                               <IconButton 
                                 size="small"
@@ -925,7 +926,7 @@ const AdminDashboard = () => {
                                 <Eye size={isMobile ? 14 : 16} />
                               </IconButton>
                             </Tooltip>
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       ))
                     )}
@@ -938,18 +939,18 @@ const AdminDashboard = () => {
           {/* Right Column - Sidebar */}
           <Grid item xs={12} lg={4}>
             {/* Quick Actions */}
-            <Card sx={{ 
-              borderRadius: 1.5, 
-              mb: { xs: 2, md: 3 }, 
+            <Card sx={{
+              borderRadius: 1.5,
+              mb: { xs: 2, md: 3 },
               border: `1px solid ${colors.borderGray}`,
               backgroundColor: colors.white
             }}>
               <CardContent sx={{ p: { xs: 1.5, sm: 2, md: 2.5 } }}>
-                <Typography 
-                  variant="h6" 
-                  sx={{ 
-                    mb: 3, 
-                    fontWeight: 700, 
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mb: 3,
+                    fontWeight: 700,
                     color: colors.darkBlue,
                     fontSize: { xs: '1rem', sm: '1.125rem' }
                   }}
@@ -983,10 +984,10 @@ const AdminDashboard = () => {
                             {action.icon}
                           </Avatar>
                           <Box sx={{ flex: 1, minWidth: 0 }}>
-                            <Typography 
-                              variant="subtitle2" 
-                              sx={{ 
-                                fontWeight: 600, 
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                fontWeight: 600,
                                 color: colors.darkBlue,
                                 fontSize: { xs: '0.8125rem', sm: '0.875rem' },
                                 whiteSpace: 'nowrap',
@@ -996,9 +997,9 @@ const AdminDashboard = () => {
                             >
                               {action.title}
                             </Typography>
-                            <Typography 
-                              variant="caption" 
-                              sx={{ 
+                            <Typography
+                              variant="caption"
+                              sx={{
                                 color: colors.darkGray,
                                 fontSize: { xs: '0.6875rem', sm: '0.75rem' },
                                 display: 'block',
@@ -1020,8 +1021,8 @@ const AdminDashboard = () => {
             </Card>
 
             {/* System Status */}
-            <Card sx={{ 
-              borderRadius: 1.5, 
+            <Card sx={{
+              borderRadius: 1.5,
               mb: { xs: 2, md: 3 },
               border: `1px solid ${colors.borderGray}`,
               backgroundColor: colors.white
@@ -1041,19 +1042,19 @@ const AdminDashboard = () => {
                     <Server size={isMobile ? 18 : 20} />
                   </Avatar>
                   <Box sx={{ minWidth: 0 }}>
-                    <Typography 
-                      variant="h6" 
-                      sx={{ 
-                        fontWeight: 700, 
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
                         color: colors.darkBlue,
                         fontSize: { xs: '1rem', sm: '1.125rem' }
                       }}
                     >
                       System Status
                     </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
+                    <Typography
+                      variant="caption"
+                      sx={{
                         color: colors.darkGray,
                         fontSize: { xs: '0.75rem', sm: '0.8125rem' }
                       }}
@@ -1062,21 +1063,21 @@ const AdminDashboard = () => {
                     </Typography>
                   </Box>
                 </Stack>
-                
+
                 <Stack spacing={{ xs: 1.5, sm: 2 }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }}>
-                      <Box sx={{ 
-                        width: 8, 
-                        height: 8, 
-                        borderRadius: '50%', 
+                      <Box sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
                         backgroundColor: getSystemStatusColor(systemStatus.api),
                         flexShrink: 0
                       }} />
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          color: colors.darkBlue, 
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: colors.darkBlue,
                           fontWeight: 500,
                           fontSize: { xs: '0.8125rem', sm: '0.875rem' }
                         }}
@@ -1084,9 +1085,9 @@ const AdminDashboard = () => {
                         API Status
                       </Typography>
                     </Stack>
-                    <Chip 
-                      label={systemStatus.api.charAt(0).toUpperCase() + systemStatus.api.slice(1)} 
-                      size="small" 
+                    <Chip
+                      label={systemStatus.api.charAt(0).toUpperCase() + systemStatus.api.slice(1)}
+                      size="small"
                       sx={{
                         backgroundColor: alpha(getSystemStatusColor(systemStatus.api), 0.1),
                         color: getSystemStatusColor(systemStatus.api),
@@ -1097,14 +1098,14 @@ const AdminDashboard = () => {
                       }}
                     />
                   </Stack>
-                  
+
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }}>
                       <Database size={isMobile ? 12 : 14} color={colors.darkGray} />
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          color: colors.darkBlue, 
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: colors.darkBlue,
                           fontWeight: 500,
                           fontSize: { xs: '0.8125rem', sm: '0.875rem' }
                         }}
@@ -1112,9 +1113,9 @@ const AdminDashboard = () => {
                         Database
                       </Typography>
                     </Stack>
-                    <Chip 
-                      label="Connected" 
-                      size="small" 
+                    <Chip
+                      label="Connected"
+                      size="small"
                       sx={{
                         backgroundColor: alpha('#10b981', 0.1),
                         color: '#10b981',
@@ -1125,14 +1126,14 @@ const AdminDashboard = () => {
                       }}
                     />
                   </Stack>
-                  
+
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }}>
                       <AlertOctagon size={isMobile ? 12 : 14} color={colors.darkGray} />
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          color: colors.darkBlue, 
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: colors.darkBlue,
                           fontWeight: 500,
                           fontSize: { xs: '0.8125rem', sm: '0.875rem' }
                         }}
@@ -1141,28 +1142,28 @@ const AdminDashboard = () => {
                       </Typography>
                     </Stack>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0 }}>
-                      <Box sx={{ 
-                        width: 60, 
-                        height: 4, 
-                        borderRadius: 2, 
-                        backgroundColor: alpha(colors.darkGray, 0.2), 
+                      <Box sx={{
+                        width: 60,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: alpha(colors.darkGray, 0.2),
                         overflow: 'hidden',
                         flexShrink: 0
                       }}>
-                        <Box 
-                          sx={{ 
-                            width: `${systemStatus.storage}%`, 
-                            height: '100%', 
+                        <Box
+                          sx={{
+                            width: `${systemStatus.storage}%`,
+                            height: '100%',
                             backgroundColor: systemStatus.storage > 90 ? '#ef4444' : systemStatus.storage > 75 ? '#f59e0b' : '#10b981',
                             borderRadius: 2
-                          }} 
+                          }}
                         />
                       </Box>
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          fontWeight: 600, 
-                          color: colors.darkBlue, 
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 600,
+                          color: colors.darkBlue,
                           minWidth: 35,
                           fontSize: { xs: '0.75rem', sm: '0.875rem' }
                         }}
@@ -1171,14 +1172,14 @@ const AdminDashboard = () => {
                       </Typography>
                     </Box>
                   </Stack>
-                  
+
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5 }}>
                       <ShieldCheck size={isMobile ? 12 : 14} color={colors.darkGray} />
-                      <Typography 
-                        variant="body2" 
-                        sx={{ 
-                          color: colors.darkBlue, 
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: colors.darkBlue,
                           fontWeight: 500,
                           fontSize: { xs: '0.8125rem', sm: '0.875rem' }
                         }}
@@ -1186,10 +1187,10 @@ const AdminDashboard = () => {
                         System Uptime
                       </Typography>
                     </Stack>
-                    <Typography 
-                      variant="body2" 
-                      sx={{ 
-                        fontWeight: 600, 
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 600,
                         color: colors.darkBlue,
                         fontSize: { xs: '0.75rem', sm: '0.875rem' }
                       }}
@@ -1202,19 +1203,19 @@ const AdminDashboard = () => {
             </Card>
 
             {/* Awareness Hub */}
-            <Card sx={{ 
+            <Card sx={{
               borderRadius: 3,
               border: `1px solid ${colors.borderGray}`,
               background: `linear-gradient(135deg, ${alpha(colors.blue, 0.08)} 0%, ${alpha(colors.blue, 0.12)} 100%)`,
               position: 'relative',
               overflow: 'hidden'
             }}>
-              <Box sx={{ 
-                position: 'absolute', 
-                top: -20, 
-                right: -20, 
-                width: 100, 
-                height: 100, 
+              <Box sx={{
+                position: 'absolute',
+                top: -20,
+                right: -20,
+                width: 100,
+                height: 100,
                 borderRadius: '50%',
                 background: `radial-gradient(circle, ${alpha(colors.blue, 0.1)} 0%, transparent 70%)`
               }} />
@@ -1231,19 +1232,19 @@ const AdminDashboard = () => {
                     <Shield size={isMobile ? 18 : 20} />
                   </Avatar>
                   <Box sx={{ minWidth: 0 }}>
-                    <Typography 
-                      variant="h6" 
-                      sx={{ 
-                        fontWeight: 700, 
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 700,
                         color: colors.darkBlue,
                         fontSize: { xs: '1rem', sm: '1.125rem' }
                       }}
                     >
                       Security Awareness
                     </Typography>
-                    <Typography 
-                      variant="caption" 
-                      sx={{ 
+                    <Typography
+                      variant="caption"
+                      sx={{
                         color: colors.darkGray,
                         fontSize: { xs: '0.75rem', sm: '0.8125rem' }
                       }}
@@ -1252,18 +1253,18 @@ const AdminDashboard = () => {
                     </Typography>
                   </Box>
                 </Stack>
-                
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    color: colors.darkGray, 
-                    mb: 3, 
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: colors.darkGray,
+                    mb: 3,
                     fontSize: { xs: '0.75rem', sm: '0.875rem' }
                   }}
                 >
                   Access comprehensive security policies, emergency protocols, and preventive guidelines.
                 </Typography>
-                
+
                 <Button
                   fullWidth
                   variant="contained"
@@ -1289,37 +1290,37 @@ const AdminDashboard = () => {
 
         {/* Loading State */}
         {loading && (
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             py: { xs: 4, sm: 6, md: 8 },
             borderRadius: 3,
             border: `1px dashed ${colors.borderGray}`,
             backgroundColor: alpha(colors.blue, 0.02),
             mt: 3
           }}>
-            <RefreshCw 
-              size={isMobile ? 32 : 48} 
+            <RefreshCw
+              size={isMobile ? 32 : 48}
               color={colors.blue}
               style={{ animation: 'spin 1s linear infinite' }}
             />
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                mt: 2, 
-                fontWeight: 600, 
+            <Typography
+              variant="h6"
+              sx={{
+                mt: 2,
+                fontWeight: 600,
                 color: colors.darkBlue,
                 fontSize: { xs: '1rem', sm: '1.25rem' }
               }}
             >
               Loading Dashboard Data
             </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                mt: 1, 
+            <Typography
+              variant="body2"
+              sx={{
+                mt: 1,
                 color: colors.darkGray,
                 fontSize: { xs: '0.75rem', sm: '0.875rem' },
                 textAlign: 'center',
@@ -1332,23 +1333,23 @@ const AdminDashboard = () => {
         )}
 
         {/* Footer */}
-        <Box sx={{ 
-          mt: 3, 
-          pt: 2, 
+        <Box sx={{
+          mt: 3,
+          pt: 2,
           borderTop: `1px solid ${colors.borderGray}`,
           pb: 1
         }}>
-          <Typography 
-            variant="caption" 
-            sx={{ 
+          <Typography
+            variant="caption"
+            sx={{
               color: colors.darkGray,
               fontSize: { xs: '0.6875rem', sm: '0.75rem' }
             }}
           >
-            Last updated: {new Date().toLocaleDateString('en-US', { 
-              weekday: 'short', 
-              year: 'numeric', 
-              month: 'short', 
+            Last updated: {new Date().toLocaleDateString('en-US', {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
               day: 'numeric',
               hour: '2-digit',
               minute: '2-digit'

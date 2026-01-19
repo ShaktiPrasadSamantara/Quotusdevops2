@@ -26,17 +26,27 @@ app.get('/', (req, res) => {
 
 // Global error handler (should be last)
 app.use((err, req, res, next) => {
-  console.error('Global error:', err.stack || err.message);
+  console.error('Global error handler triggered:', err);
 
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Internal Server Error';
+
+  // Common cases – you can extend this
+  if (message.includes('already exists')) {
+    statusCode = 409; // Conflict
+  } else if (message.includes('provide') || message.includes('Invalid')) {
+    statusCode = 400;
+  } else if (message.includes('not found')) {
+    statusCode = 404;
+  }
 
   res.status(statusCode).json({
     success: false,
     error: message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
   });
 });
+
 
 const PORT = process.env.PORT || 5000;
 

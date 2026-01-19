@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+
+
 
 const AuthContext = createContext(null);
 
@@ -48,12 +51,17 @@ export const AuthProvider = ({ children }) => {
     initialize();
   }, []);
 
-  const login = (userData, jwtToken) => {
-    setUser(userData);
-    setToken(jwtToken);
-    localStorage.setItem('sentraToken', jwtToken);
-    localStorage.setItem('sentraUser', JSON.stringify(userData));
-  };
+  // After successful login
+const login = async (credentials) => {
+  const res = await axios.post('/api/auth/login', credentials);
+  const { token, user } = res.data;
+
+  console.log("LOGIN SUCCESS — received user:", user);
+
+  localStorage.setItem("token", token);
+  setUser(user);           // ← very important
+  // or setUser({ ...user, token }); if your context expects it
+};
 
   const logout = () => {
     setUser(null);
