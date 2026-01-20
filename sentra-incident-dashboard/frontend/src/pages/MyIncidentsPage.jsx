@@ -26,7 +26,7 @@ const MyIncidentsPage = () => {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const res = await axios.get('http://13.205.179.91:5000/api/incidents/my', {
+        const res = await axios.get('http://localhost:5000/api/incidents/my', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -72,7 +72,7 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
     confirmPassword: '',
     role: 'admin' // Set default role to 'admin'
   });
-  
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -90,19 +90,19 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Full name is required';
     } else if (formData.name.length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
-    
+
     if (!formData.email) {
       newErrors.email = 'Email address is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
@@ -110,13 +110,13 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       newErrors.password = 'Password must contain uppercase, lowercase, and numbers';
     }
-    
+
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -137,22 +137,22 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     // Ensure only admin role can be created
     if (formData.role !== 'admin') {
       setErrorMessage('Only admin users can be created from this form');
       return;
     }
-    
+
     setLoading(true);
     setErrorMessage('');
-    
+
     try {
-      const response = await fetch('http://13.205.179.91:5000/api/auth/register', {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -164,13 +164,13 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
           role: formData.role // Always 'admin'
         })
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
-      
+
       setSuccess(true);
       setFormData({
         name: '',
@@ -179,9 +179,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
         confirmPassword: '',
         role: 'admin' // Reset to 'admin'
       });
-      
+
       setTimeout(() => setSuccess(false), 5000);
-      
+
     } catch (error) {
       setErrorMessage(error.message || 'An error occurred during registration');
     } finally {
@@ -192,8 +192,8 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ 
-        minHeight: '100vh', 
+      <Box sx={{
+        minHeight: '100vh',
         bgcolor: 'background.default',
         pt: 2,
         display: 'flex',
@@ -238,22 +238,22 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                 >
                   <AdminPanelSettingsIcon sx={{ fontSize: 28 }} />
                 </Avatar>
-                <Typography 
-                  variant="h5" 
-                  component="h1" 
-                  gutterBottom 
-                  sx={{ 
+                <Typography
+                  variant="h5"
+                  component="h1"
+                  gutterBottom
+                  sx={{
                     fontWeight: 600,
                     color: 'primary.dark',
                     fontSize: '1.5rem'
                   }}
                 >
-                  Create Admin Account  
+                  Create Admin Account
                 </Typography>
-                <Typography 
-                  variant="body2" 
+                <Typography
+                  variant="body2"
                   color="text.secondary"
-                  sx={{ 
+                  sx={{
                     opacity: 0.8,
                     fontSize: '0.875rem'
                   }}
@@ -263,9 +263,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
               </Box>
 
               {success && (
-                <Alert 
-                  severity="success" 
-                  sx={{ 
+                <Alert
+                  severity="success"
+                  sx={{
                     mb: 3,
                     borderRadius: 1.5,
                     fontSize: '0.875rem',
@@ -278,9 +278,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
               )}
 
               {errorMessage && (
-                <Alert 
-                  severity="error" 
-                  sx={{ 
+                <Alert
+                  severity="error"
+                  sx={{
                     mb: 3,
                     borderRadius: 1.5,
                     fontSize: '0.875rem',
@@ -296,9 +296,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                 <Grid container spacing={2}>
                   {/* Full Name Field */}
                   <Grid item xs={12}>
-                    <Typography variant="caption" sx={{ 
-                      fontWeight: 600, 
-                      mb: 0.5, 
+                    <Typography variant="caption" sx={{
+                      fontWeight: 600,
+                      mb: 0.5,
                       color: 'text.primary',
                       display: 'flex',
                       alignItems: 'center',
@@ -344,9 +344,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
 
                   {/* Email Field */}
                   <Grid item xs={12}>
-                    <Typography variant="caption" sx={{ 
-                      fontWeight: 600, 
-                      mb: 0.5, 
+                    <Typography variant="caption" sx={{
+                      fontWeight: 600,
+                      mb: 0.5,
                       color: 'text.primary',
                       display: 'flex',
                       alignItems: 'center',
@@ -391,9 +391,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                   <Grid item xs={12}>
                     <Grid container spacing={1.5}>
                       <Grid item xs={6}>
-                        <Typography variant="caption" sx={{ 
-                          fontWeight: 600, 
-                          mb: 0.5, 
+                        <Typography variant="caption" sx={{
+                          fontWeight: 600,
+                          mb: 0.5,
                           color: 'text.primary',
                           display: 'flex',
                           alignItems: 'center',
@@ -449,9 +449,9 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                       </Grid>
 
                       <Grid item xs={6}>
-                        <Typography variant="caption" sx={{ 
-                          fontWeight: 600, 
-                          mb: 0.5, 
+                        <Typography variant="caption" sx={{
+                          fontWeight: 600,
+                          mb: 0.5,
                           color: 'text.primary',
                           display: 'flex',
                           alignItems: 'center',
@@ -511,14 +511,16 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                     </Typography>
                   </Grid>
 
+
+                  {/* User Role and Create Button in One Line */}
                   {/* User Role and Create Button in One Line */}
                   <Grid item xs={12}>
                     <Grid container spacing={1.5} alignItems="flex-end">
                       {/* User Role Field - Fixed to Admin Only */}
                       <Grid item xs={5}>
-                        <Typography variant="caption" sx={{ 
-                          fontWeight: 600, 
-                          mb: 0.5, 
+                        <Typography variant="caption" sx={{
+                          fontWeight: 600,
+                          mb: 0.5,
                           color: 'text.primary',
                           display: 'flex',
                           alignItems: 'center',
@@ -548,24 +550,21 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                           >
                             <MenuItem value="admin" sx={{ fontSize: '0.875rem' }}>
                               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Box sx={{ 
-                                  width: 6, 
-                                  height: 6, 
-                                  borderRadius: '50%', 
-                                  bgcolor: '#1976d2' 
+                                <Box sx={{
+                                  width: 6,
+                                  height: 6,
+                                  borderRadius: '50%',
+                                  bgcolor: '#1976d2'
                                 }} />
                                 <Typography variant="body2">Administrator</Typography>
                               </Box>
                             </MenuItem>
                           </Select>
                         </FormControl>
-                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem', mt: 0.5, display: 'block' }}>
-                          Only administrator accounts can be created
-                        </Typography>
                       </Grid>
 
                       {/* Create User Button - Takes more space */}
-                      <Grid item xs={7} sx={{ mt: 0.5 }}>
+                      <Grid item xs={7}>
                         <Button
                           type="submit"
                           fullWidth
@@ -603,21 +602,35 @@ const AdminCreationForm = ({ onToggleMode, mode }) => {
                         </Button>
                       </Grid>
                     </Grid>
+
+                    {/* Moved the note text outside the grid to prevent layout issues */}
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{
+                        fontSize: '0.65rem',
+                        mt: 0.5,
+                        display: 'block',
+                        ml: 0.5 // Small margin to align with the role field
+                      }}
+                    >
+                      Only administrator accounts can be created
+                    </Typography>
                   </Grid>
                 </Grid>
               </form>
 
-              <Box sx={{ 
-                mt: 3, 
-                pt: 2, 
-                borderTop: '1px solid', 
+              <Box sx={{
+                mt: 3,
+                pt: 2,
+                borderTop: '1px solid',
                 borderColor: '#e0e0e0',
-                textAlign: 'center' 
+                textAlign: 'center'
               }}>
-                <Typography 
-                  variant="caption" 
+                <Typography
+                  variant="caption"
                   color="text.secondary"
-                  sx={{ 
+                  sx={{
                     opacity: 0.7,
                     fontSize: '0.7rem'
                   }}

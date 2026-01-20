@@ -49,7 +49,7 @@ const ReportIncidentPage = () => {
     setMessage('');
     try {
       const res = await axios.post(
-        'http://13.205.179.91:5000/api/incidents',
+        'http://localhost:5000/api/incidents',
         form,
         {
           headers: {

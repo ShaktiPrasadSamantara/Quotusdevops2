@@ -450,7 +450,8 @@ const AnalyticsDashboard = () => {
       });
     } catch (error) {
       console.error('Error fetching analytics data:', error);
-      setMockData();
+      // Pass empty array to setMockData since we don't have data when API fails
+      setMockData([]);
     } finally {
       setLoading(false);
     }
@@ -484,58 +485,199 @@ const AnalyticsDashboard = () => {
   };
 
   const generateTrendData = (incidents, range) => {
+    const now = new Date();
     let data = [];
+    
+    // Helper function to group incidents by date
+    const groupIncidentsByDate = (incidents, dateFormatFn, labels) => {
+      const grouped = {};
+      
+      // Initialize all periods with zero values
+      labels.forEach(label => {
+        grouped[label] = {
+          total: 0,
+          pending: 0,
+          resolved: 0,
+          inReview: 0
+        };
+      });
+      
+      // Count incidents for each period
+      incidents.forEach(incident => {
+        const date = new Date(incident.createdAt || incident.date);
+        const period = dateFormatFn(date);
+        
+        if (grouped[period]) {
+          grouped[period].total += 1;
+          
+          switch (incident.status?.toLowerCase()) {
+            case 'pending':
+              grouped[period].pending += 1;
+              break;
+            case 'resolved':
+              grouped[period].resolved += 1;
+              break;
+            case 'in review':
+            case 'in_review':
+            case 'inreview':
+              grouped[period].inReview += 1;
+              break;
+            default:
+              // Handle any other status as pending for chart purposes
+              grouped[period].pending += 1;
+              break;
+          }
+        }
+      });
+      
+      return grouped;
+    };
     
     if (range === 'week') {
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      days.forEach((day, index) => {
+      
+      // Get dates for last 7 days
+      const last7Days = [];
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        last7Days.push(date);
+      }
+      
+      // Format function for week view (day of week)
+      const getDayOfWeek = (date) => {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days[date.getDay()];
+      };
+      
+      const grouped = groupIncidentsByDate(incidents, getDayOfWeek, days);
+      
+      // Convert to array format for chart
+      days.forEach((day) => {
         data.push({
           date: day,
-          total: Math.floor(Math.random() * 20) + 10,
-          pending: Math.floor(Math.random() * 6) + 2,
-          resolved: Math.floor(Math.random() * 12) + 5,
-          inReview: Math.floor(Math.random() * 4) + 1
+          total: grouped[day].total,
+          pending: grouped[day].pending,
+          resolved: grouped[day].resolved,
+          inReview: grouped[day].inReview
         });
       });
+      
     } else if (range === 'month') {
-      for (let i = 4; i > 0; i--) {
-        data.push({
-          date: `W${i}`,
-          total: Math.floor(Math.random() * 60) + 30,
-          pending: Math.floor(Math.random() * 18) + 8,
-          resolved: Math.floor(Math.random() * 35) + 18,
-          inReview: Math.floor(Math.random() * 12) + 4
+      // For month view, show last 4 weeks
+      const weeks = ['W4', 'W3', 'W2', 'W1'];
+      
+      // Get dates for last 4 weeks
+      const last4Weeks = [];
+      for (let i = 3; i >= 0; i--) {
+        const weekStart = new Date(now);
+        weekStart.setDate(weekStart.getDate() - (i * 7) - 6);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        
+        last4Weeks.push({
+          start: weekStart,
+          end: weekEnd,
+          label: weeks[3 - i]
         });
       }
-    } else {
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-      months.forEach(month => {
+      
+      // Format function for month view (week number)
+      const getWeekNumber = (date) => {
+        for (let i = 0; i < last4Weeks.length; i++) {
+          const week = last4Weeks[i];
+          if (date >= week.start && date <= week.end) {
+            return week.label;
+          }
+        }
+        return null;
+      };
+      
+      const grouped = groupIncidentsByDate(incidents, getWeekNumber, weeks);
+      
+      // Convert to array format for chart
+      weeks.forEach(week => {
         data.push({
-          date: month,
-          total: Math.floor(Math.random() * 90) + 45,
-          pending: Math.floor(Math.random() * 25) + 12,
-          resolved: Math.floor(Math.random() * 60) + 30,
-          inReview: Math.floor(Math.random() * 15) + 6
+          date: week,
+          total: grouped[week].total,
+          pending: grouped[week].pending,
+          resolved: grouped[week].resolved,
+          inReview: grouped[week].inReview
         });
       });
+      
+    } else { // year view
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      
+      // Get current month and previous 5 months
+      const currentMonth = now.getMonth();
+      const displayMonths = [];
+      
+      for (let i = 5; i >= 0; i--) {
+        const monthIndex = (currentMonth - i + 12) % 12;
+        displayMonths.push(months[monthIndex]);
+      }
+      
+      // Format function for year view (month abbreviation)
+      const getMonthAbbr = (date) => {
+        return months[date.getMonth()];
+      };
+      
+      const grouped = groupIncidentsByDate(incidents, getMonthAbbr, displayMonths);
+      
+      // Convert to array format for chart
+      displayMonths.forEach(month => {
+        data.push({
+          date: month,
+          total: grouped[month].total,
+          pending: grouped[month].pending,
+          resolved: grouped[month].resolved,
+          inReview: grouped[month].inReview
+        });
+      });
+    }
+    
+    // If all data is zero (no incidents), show a minimal representation
+    if (data.every(item => item.total === 0) && incidents.length > 0) {
+      // Distribute total incidents across periods
+      const total = incidents.length;
+      const pending = incidents.filter((i) => i.status === 'Pending').length;
+      const resolved = incidents.filter((i) => i.status === 'Resolved').length;
+      const inReview = incidents.filter((i) => i.status === 'In Review').length;
+      
+      const periods = data.length;
+      data = data.map((item, index) => ({
+        date: item.date,
+        total: Math.floor(total / periods) + (index < total % periods ? 1 : 0),
+        pending: Math.floor(pending / periods) + (index < pending % periods ? 1 : 0),
+        resolved: Math.floor(resolved / periods) + (index < resolved % periods ? 1 : 0),
+        inReview: Math.floor(inReview / periods) + (index < inReview % periods ? 1 : 0)
+      }));
     }
     
     return data;
   };
 
-  const setMockData = () => {
-    const mockTrendData = generateTrendData([], 'month');
+  const setMockData = (incidents = []) => {
+    const mockTrendData = generateTrendData(incidents, timeRange);
+    
+    // Calculate stats from actual incidents or use defaults
+    const total = incidents.length || 142;
+    const pending = incidents.filter(i => i.status === 'Pending').length || 24;
+    const inReview = incidents.filter(i => i.status === 'In Review').length || 18;
+    const resolved = incidents.filter(i => i.status === 'Resolved').length || 100;
+    const percentageResolved = total > 0 ? Math.round((resolved / total) * 100) : 70;
     
     setAnalyticsData({
       trendData: mockTrendData,
       stats: {
-        total: 142,
-        pending: 24,
-        inReview: 18,
-        resolved: 100,
-        percentageResolved: 70,
-        avgResolutionTime: '2.5',
-        satisfactionRate: 94
+        total,
+        pending,
+        inReview,
+        resolved,
+        percentageResolved,
+        avgResolutionTime: calculateAvgResolutionTime(incidents) || '2.5',
+        satisfactionRate: calculateSatisfactionRate(incidents) || 94
       }
     });
   };

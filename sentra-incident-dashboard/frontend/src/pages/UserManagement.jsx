@@ -51,9 +51,9 @@ const UserManagement = () => {
     setLoading(true);
     try {
       let url = '';
-      if (selectedRole === 'staff') url = 'http://13.205.179.91:5000/api/auth/staff';
-      else if (selectedRole === 'student') url = 'http://13.205.179.91:5000/api/auth/students';
-      else if (selectedRole === 'admin') url = 'http://13.205.179.91:5000/api/auth/admins';
+      if (selectedRole === 'staff') url = 'http://localhost:5000/api/auth/staff';
+      else if (selectedRole === 'student') url = 'http://localhost:5000/api/auth/students';
+      else if (selectedRole === 'admin') url = 'http://localhost:5000/api/auth/admins';
 
       const res = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
@@ -118,7 +118,7 @@ const UserManagement = () => {
                   <TableRow sx={{ backgroundColor: '#f1f5f9' }}>
                     <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
-                    <TableCell>Role</TableCell>
+                    {/* <TableCell>Role</TableCell> */}
                   </TableRow>
                 </TableHead>
 
@@ -128,7 +128,7 @@ const UserManagement = () => {
                       <TableRow key={i}>
                         <TableCell><Skeleton width={120} /></TableCell>
                         <TableCell><Skeleton width={200} /></TableCell>
-                        <TableCell><Skeleton width={80} /></TableCell>
+                        {/* \ */}
                       </TableRow>
                     ))
                   ) : (
@@ -148,14 +148,14 @@ const UserManagement = () => {
                           </Stack>
                         </TableCell>
 
-                        <TableCell>
+                        {/* <TableCell>
                           <Chip
                             icon={roleIcons[user.role]}
                             label={user.role}
                             sx={{ backgroundColor: '#ecfdf5', color: colors.success, fontWeight: 600 }}
                             size="small"
                           />
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     ))
                   )}

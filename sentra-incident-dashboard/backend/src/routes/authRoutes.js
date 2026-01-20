@@ -13,7 +13,7 @@ router.get(
   authorize('admin'), // ← recommended: use your existing authorize middleware
   async (req, res, next) => {
     try {
-        console.log("hollls")
+        
       const staff = await User.find({ role: 'staff' })
         .select('_id name email role')
         .sort({ name: 1 })
