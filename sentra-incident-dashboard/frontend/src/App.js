@@ -16,6 +16,9 @@ import Navbar from './components/layout/Navbar';
 import getTheme from './theme';
 import UserCreationForm from './pages/userCreate'; 
 import AdminCreationForm from './pages/adminCreation';
+// import AnalyticsDashboard from './pages/AnalyticsDashboard';
+import AnalyticsDashboard from './pages/AnalyticsDasboard';
+import UserManagement from './pages/UserManagement';
 
 
 function App() {
@@ -106,9 +109,20 @@ function App() {
             } />
 
 
+            <Route path="/analytics" element={
+              
+                <AnalyticsDashboard/>
+             
+            } />
+            <Route path="/user-management" element={
+              
+                <UserManagement/>
+             
+            } />
+
             <Route path="/admin-creation" element={
              
-                <AdminCreationForm />
+                <AdminCreationForm/>
            
             } />
 

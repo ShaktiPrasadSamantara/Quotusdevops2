@@ -4,6 +4,7 @@ const router = express.Router();
 const { register, login, getMe } = require('../controllers/authController');
 const { protect, authorize } = require('../middleware/authMiddleware'); // ← use authorize if you have it
 const User = require('../models/User'); // ← direct import for simplicity
+const userRepository = require('../daos/userRepository');
 
 // GET /api/auth/staff - Admin only - List all staff users
 router.get(
@@ -25,6 +26,17 @@ router.get(
     }
   }
 );
+
+
+router.get('/students', protect, authorize('admin'), async (req, res, next) => {
+  try {
+    const students = await userRepository.findByRole('student');
+    res.json(students);
+  } catch (error) {
+    console.error('Error fetching student users:', error);
+    next(error);
+  }
+});
 
 router.get('/debug-test', (req, res) => {
   res.json({ 

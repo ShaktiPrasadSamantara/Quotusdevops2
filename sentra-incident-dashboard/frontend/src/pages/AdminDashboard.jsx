@@ -112,7 +112,7 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:5000/api/incidents', {
+      const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const incidents = res.data;
@@ -240,23 +240,23 @@ const AdminDashboard = () => {
       title: 'Analytics Dashboard',
       description: 'View detailed reports & insights',
       icon: <BarChart3 size={18} />,
-      path: '/admin/analytics',
+      path: '/analytics',
       color: '#8b5cf6'
     },
     {
       title: 'User Management',
       description: 'Manage user accounts & permissions',
       icon: <Users size={18} />,
-      path: '/admin/users',
+      path: '/user-management',
       color: '#10b981'
     },
-    {
-      title: 'System Settings',
-      description: 'Configure system preferences',
-      icon: <Settings size={18} />,
-      path: '/admin/settings',
-      color: colors.darkGray
-    },
+    // {
+    //   title: 'System Settings',
+    //   description: 'Configure system preferences',
+    //   icon: <Settings size={18} />,
+    //   path: '/admin/settings',
+    //   color: colors.darkGray
+    // },
   ];
 
   const formatDate = (dateString) => {
