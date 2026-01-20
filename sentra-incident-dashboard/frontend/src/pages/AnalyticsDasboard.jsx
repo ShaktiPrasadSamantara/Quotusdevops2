@@ -33,18 +33,18 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-// Color palette - Consistent with AdminDashboard
+// Updated Color Palette - More Professional
 const colors = {
-  darkBlue: '#1e293b',
-  lightGray: '#f8fafc',
+  darkBlue: '#1a237e',
+  lightGray: '#f8f9fa',
   white: '#ffffff',
-  darkGray: '#475569',
-  blue: '#3b82f6',
-  borderGray: '#e2e8f0',
-  darkerBlue: '#2563eb',
-  success: '#10b981',
-  warning: '#f59e0b',
-  info: '#0ea5e9'
+  darkGray: '#5a6c7d',
+  blue: '#3f51b5',
+  borderGray: '#e0e0e0',
+  success: '#4caf50',
+  warning: '#ff9800',
+  info: '#2196f3',
+  purple: '#9c27b0'
 };
 
 // Safe alpha function
@@ -53,8 +53,8 @@ const safeAlpha = (color, opacity) => {
   return alpha(color, opacity);
 };
 
-// Professional Bar Chart Component - Larger and centered
-const ProfessionalBarChart = ({ data, height = 400 }) => {
+// Professional Bar Chart Component - Wider and optimized
+const ProfessionalBarChart = ({ data, height = 380 }) => {
   const maxValue = Math.max(...data.map(item => item.total), 1);
   
   const statusColors = {
@@ -75,9 +75,9 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
         background: `repeating-linear-gradient(
           to bottom,
           transparent 0px,
-          transparent 24px,
-          ${safeAlpha(colors.borderGray, 0.1)} 24px,
-          ${safeAlpha(colors.borderGray, 0.1)} 25px
+          transparent 23px,
+          ${safeAlpha(colors.borderGray, 0.08)} 23px,
+          ${safeAlpha(colors.borderGray, 0.08)} 24px
         )`,
         pointerEvents: 'none'
       }}>
@@ -92,7 +92,7 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
               top: `${100 - percent}%`,
               transform: 'translateY(-50%)',
               color: colors.darkGray,
-              fontSize: '0.875rem',
+              fontSize: '0.75rem',
               fontWeight: 500
             }}
           >
@@ -105,17 +105,17 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
       <Box sx={{ 
         position: 'relative', 
         height: 'calc(100% - 40px)', 
-        pl: 8, 
-        pr: 4, 
-        pt: 3, 
-        pb: 3 
+        pl: 7, 
+        pr: 3, 
+        pt: 2, 
+        pb: 2 
       }}>
         <Box sx={{
           display: 'flex',
           height: '100%',
           alignItems: 'flex-end',
           justifyContent: 'space-between',
-          gap: 3
+          gap: 2
         }}>
           {data.map((item, index) => {
             const totalHeight = (item.total / maxValue) * 100;
@@ -136,16 +136,18 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
                 <Box sx={{ 
                   position: 'relative',
                   height: `${totalHeight}%`,
-                  width: '80%',
-                  minHeight: 30,
-                  borderRadius: '6px 6px 0 0',
+                  width: '85%',
+                  minHeight: 20,
+                  borderRadius: '4px 4px 0 0',
                   overflow: 'hidden',
-                  border: `1px solid ${safeAlpha(colors.borderGray, 0.3)}`,
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.08)',
-                  transition: 'all 0.3s ease',
+                  background: 'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.02) 100%)',
+                  border: `1px solid ${safeAlpha(colors.borderGray, 0.2)}`,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 12px rgba(0,0,0,0.12)'
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    borderColor: safeAlpha(colors.blue, 0.3)
                   }
                 }}>
                   {/* Resolved (Bottom) */}
@@ -156,8 +158,8 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
                       left: 0,
                       right: 0,
                       height: `${resolvedHeight}%`,
-                      backgroundColor: statusColors.resolved,
-                      transition: 'height 0.3s ease'
+                      background: `linear-gradient(180deg, ${statusColors.resolved}, ${alpha(statusColors.resolved, 0.9)})`,
+                      transition: 'height 0.4s ease'
                     }}
                   />
                   
@@ -169,8 +171,8 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
                       left: 0,
                       right: 0,
                       height: `${inReviewHeight}%`,
-                      backgroundColor: statusColors.inReview,
-                      transition: 'height 0.3s ease'
+                      background: `linear-gradient(180deg, ${statusColors.inReview}, ${alpha(statusColors.inReview, 0.9)})`,
+                      transition: 'height 0.4s ease'
                     }}
                   />
                   
@@ -182,8 +184,8 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
                       left: 0,
                       right: 0,
                       height: `${pendingHeight}%`,
-                      backgroundColor: statusColors.pending,
-                      transition: 'height 0.3s ease'
+                      background: `linear-gradient(180deg, ${statusColors.pending}, ${alpha(statusColors.pending, 0.9)})`,
+                      transition: 'height 0.4s ease'
                     }}
                   />
                   
@@ -193,13 +195,14 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    pointerEvents: 'none'
+                    pointerEvents: 'none',
+                    opacity: totalHeight > 20 ? 1 : 0
                   }}>
                     <Typography variant="caption" sx={{ 
                       color: colors.white, 
                       fontWeight: 700,
-                      fontSize: '0.875rem',
-                      textShadow: '1px 1px 3px rgba(0,0,0,0.5)'
+                      fontSize: '0.75rem',
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                     }}>
                       {item.total}
                     </Typography>
@@ -208,11 +211,11 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
                 
                 {/* Date Label */}
                 <Typography
-                  variant="body2"
+                  variant="caption"
                   sx={{
                     color: colors.darkGray,
-                    mt: 2,
-                    fontSize: '0.875rem',
+                    mt: 1.5,
+                    fontSize: '0.75rem',
                     fontWeight: 600,
                     textAlign: 'center'
                   }}
@@ -225,7 +228,7 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
         </Box>
       </Box>
 
-      {/* Legend - Centered and larger */}
+      {/* Legend */}
       <Box sx={{
         position: 'absolute',
         bottom: 0,
@@ -233,27 +236,27 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
         right: 0,
         display: 'flex',
         justifyContent: 'center',
-        gap: 4,
-        pt: 2
+        gap: 3,
+        pt: 1.5
       }}>
         {[
           { label: 'Resolved', color: statusColors.resolved },
           { label: 'Pending', color: statusColors.pending },
           { label: 'In Review', color: statusColors.inReview }
         ].map((item, index) => (
-          <Stack key={index} direction="row" alignItems="center" spacing={1.5}>
+          <Stack key={index} direction="row" alignItems="center" spacing={1}>
             <Box sx={{
-              width: 16,
-              height: 16,
-              borderRadius: '3px',
+              width: 12,
+              height: 12,
+              borderRadius: '2px',
               backgroundColor: item.color,
-              border: `2px solid ${colors.white}`,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+              border: `1px solid ${colors.white}`,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12)'
             }} />
-            <Typography variant="body2" sx={{ 
+            <Typography variant="caption" sx={{ 
               color: colors.darkGray, 
-              fontWeight: 600,
-              fontSize: '0.875rem'
+              fontWeight: 500,
+              fontSize: '0.75rem'
             }}>
               {item.label}
             </Typography>
@@ -264,7 +267,7 @@ const ProfessionalBarChart = ({ data, height = 400 }) => {
   );
 };
 
-// Status Distribution Card - Larger and centered
+// Status Distribution Card - Wider and optimized
 const StatusDistributionCard = ({ data }) => {
   const { total = 0, resolved = 0, pending = 0, inReview = 0 } = data;
   
@@ -282,34 +285,39 @@ const StatusDistributionCard = ({ data }) => {
 
   return (
     <Card sx={{
-      borderRadius: 3,
+      borderRadius: 2,
       border: `1px solid ${colors.borderGray}`,
       backgroundColor: colors.white,
       height: '100%',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+      boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+      }
     }}>
       <CardContent sx={{ p: 3 }}>
         <Typography variant="h6" sx={{ 
           fontWeight: 700, 
           color: colors.darkBlue, 
           mb: 3,
-          fontSize: '1.25rem'
+          fontSize: '1.125rem'
         }}>
           Status Distribution
         </Typography>
         
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h1" sx={{ 
+        <Box sx={{ mb: 3, textAlign: 'center', width:300}}>
+          <Typography variant="h2" sx={{ 
             fontWeight: 800, 
             color: colors.darkBlue, 
-            mb: 1,
-            fontSize: '3.5rem'
+            mb: 0.5,
+            fontSize: '2.75rem',
+            letterSpacing: '-0.5px'
           }}>
             {total.toLocaleString()}
           </Typography>
-          <Typography variant="body1" sx={{ 
+          <Typography variant="body2" sx={{ 
             color: colors.darkGray, 
-            fontSize: '1rem',
+            fontSize: '0.875rem',
             fontWeight: 500
           }}>
             Total Incidents
@@ -317,25 +325,25 @@ const StatusDistributionCard = ({ data }) => {
         </Box>
 
         {/* Progress Bars */}
-        <Stack spacing={2.5}>
+        <Stack spacing={2}>
           {[
             { label: 'Resolved', value: resolved, percentage: percentages.resolved, color: statusColors.resolved },
             { label: 'Pending', value: pending, percentage: percentages.pending, color: statusColors.pending },
             { label: 'In Review', value: inReview, percentage: percentages.inReview, color: statusColors.inReview }
           ].map((status, index) => (
             <Box key={index}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                <Typography variant="body1" sx={{ 
+              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.5 }}>
+                <Typography variant="body2" sx={{ 
                   color: colors.darkGray, 
                   fontWeight: 600,
-                  fontSize: '0.9375rem'
+                  fontSize: '0.8125rem'
                 }}>
                   {status.label}
                 </Typography>
-                <Typography variant="body1" sx={{ 
+                <Typography variant="body2" sx={{ 
                   color: colors.darkBlue, 
                   fontWeight: 700,
-                  fontSize: '0.9375rem'
+                  fontSize: '0.8125rem'
                 }}>
                   {status.value} ({status.percentage.toFixed(1)}%)
                 </Typography>
@@ -344,13 +352,12 @@ const StatusDistributionCard = ({ data }) => {
                 variant="determinate"
                 value={status.percentage}
                 sx={{
-                  height: 10,
-                  borderRadius: 5,
-                  backgroundColor: safeAlpha(status.color, 0.15),
+                  height: 8,
+                  borderRadius: 4,
+                  backgroundColor: safeAlpha(status.color, 0.1),
                   '& .MuiLinearProgress-bar': {
-                    borderRadius: 5,
-                    backgroundColor: status.color,
-                    backgroundImage: `linear-gradient(90deg, ${status.color}, ${alpha(status.color, 0.8)})`
+                    borderRadius: 4,
+                    background: `linear-gradient(90deg, ${status.color}, ${alpha(status.color, 0.9)})`
                   }
                 }}
               />
@@ -360,25 +367,25 @@ const StatusDistributionCard = ({ data }) => {
 
         {/* Resolution Rate */}
         <Box sx={{ 
-          mt: 4, 
-          p: 3, 
-          borderRadius: 3, 
-          backgroundColor: safeAlpha(colors.success, 0.08),
-          border: `1px solid ${safeAlpha(colors.success, 0.25)}`,
+          mt: 3, 
+          p: 2, 
+          borderRadius: 2, 
+          background: `linear-gradient(135deg, ${safeAlpha(colors.success, 0.1)} 0%, ${safeAlpha(colors.success, 0.05)} 100%)`,
+          border: `1px solid ${safeAlpha(colors.success, 0.2)}`,
           textAlign: 'center'
         }}>
-          <Typography variant="body1" sx={{ 
+          <Typography variant="body2" sx={{ 
             color: colors.darkGray, 
             fontWeight: 600,
-            mb: 1,
-            fontSize: '0.9375rem'
+            mb: 0.5,
+            fontSize: '0.8125rem'
           }}>
             Overall Resolution Rate
           </Typography>
-          <Typography variant="h2" sx={{ 
+          <Typography variant="h3" sx={{ 
             fontWeight: 800, 
             color: colors.success,
-            fontSize: '2.5rem'
+            fontSize: '2rem'
           }}>
             {percentages.resolved.toFixed(1)}%
           </Typography>
@@ -477,7 +484,6 @@ const AnalyticsDashboard = () => {
   };
 
   const generateTrendData = (incidents, range) => {
-    const now = new Date();
     let data = [];
     
     if (range === 'week') {
@@ -485,20 +491,20 @@ const AnalyticsDashboard = () => {
       days.forEach((day, index) => {
         data.push({
           date: day,
-          total: Math.floor(Math.random() * 25) + 15,
-          pending: Math.floor(Math.random() * 8) + 3,
-          resolved: Math.floor(Math.random() * 15) + 8,
-          inReview: Math.floor(Math.random() * 5) + 2
+          total: Math.floor(Math.random() * 20) + 10,
+          pending: Math.floor(Math.random() * 6) + 2,
+          resolved: Math.floor(Math.random() * 12) + 5,
+          inReview: Math.floor(Math.random() * 4) + 1
         });
       });
     } else if (range === 'month') {
       for (let i = 4; i > 0; i--) {
         data.push({
-          date: `Week ${i}`,
-          total: Math.floor(Math.random() * 80) + 40,
-          pending: Math.floor(Math.random() * 25) + 10,
-          resolved: Math.floor(Math.random() * 50) + 25,
-          inReview: Math.floor(Math.random() * 15) + 5
+          date: `W${i}`,
+          total: Math.floor(Math.random() * 60) + 30,
+          pending: Math.floor(Math.random() * 18) + 8,
+          resolved: Math.floor(Math.random() * 35) + 18,
+          inReview: Math.floor(Math.random() * 12) + 4
         });
       }
     } else {
@@ -506,10 +512,10 @@ const AnalyticsDashboard = () => {
       months.forEach(month => {
         data.push({
           date: month,
-          total: Math.floor(Math.random() * 120) + 60,
-          pending: Math.floor(Math.random() * 35) + 15,
-          resolved: Math.floor(Math.random() * 80) + 40,
-          inReview: Math.floor(Math.random() * 20) + 8
+          total: Math.floor(Math.random() * 90) + 45,
+          pending: Math.floor(Math.random() * 25) + 12,
+          resolved: Math.floor(Math.random() * 60) + 30,
+          inReview: Math.floor(Math.random() * 15) + 6
         });
       });
     }
@@ -538,103 +544,86 @@ const AnalyticsDashboard = () => {
     {
       title: 'Total Incidents',
       value: analyticsData.stats.total || 0,
-      icon: <FileText size={24} />,
+      icon: <FileText size={22} />,
       color: colors.blue,
       trend: '+12%',
-      trendIcon: <TrendingUp size={20} />,
       trendColor: colors.success,
       description: 'Total reported incidents'
     },
     {
       title: 'Pending Cases',
       value: analyticsData.stats.pending || 0,
-      icon: <Clock size={24} />,
+      icon: <Clock size={22} />,
       color: colors.warning,
       trend: '+5%',
-      trendIcon: <TrendingUp size={20} />,
       trendColor: colors.warning,
       description: 'Awaiting resolution'
     },
     {
       title: 'Resolved Cases',
       value: analyticsData.stats.resolved || 0,
-      icon: <CheckCircle size={24} />,
+      icon: <CheckCircle size={22} />,
       color: colors.success,
       trend: '+18%',
-      trendIcon: <TrendingUp size={20} />,
       trendColor: colors.success,
       description: 'Successfully resolved'
     },
     {
       title: 'In Review',
       value: analyticsData.stats.inReview || 0,
-      icon: <AlertCircle size={24} />,
+      icon: <AlertCircle size={22} />,
       color: colors.info,
       trend: '+8%',
-      trendIcon: <TrendingUp size={20} />,
       trendColor: colors.info,
       description: 'Under investigation'
     }
   ];
 
-  const formatNumber = (num) => {
-    const value = num || 0;
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(1)}k`;
-    }
-    return value.toLocaleString();
-  };
-
   return (
     <Box sx={{
       backgroundColor: colors.lightGray,
       minHeight: '100vh',
-      py: 4
+      py: 3
     }}>
       <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
-        {/* Header Section - Centered and larger */}
-        <Box sx={{ mb: 5 }}>
+        {/* Header Section */}
+        <Box sx={{ mb: 4 }}>
           <Box sx={{ 
-            mb: 4, 
-            textAlign: { xs: 'center', sm: 'left' },
-            maxWidth: '1200px',
-            mx: 'auto'
+            mb: 3, 
+            textAlign: { xs: 'center', sm: 'left' }
           }}>
             <Typography
-              variant="h3"
+              variant="h4"
               sx={{
                 fontWeight: 800,
                 color: colors.darkBlue,
-                mb: 1.5,
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '2.75rem' }
+                mb: 1,
+                fontSize: { xs: '1.75rem', sm: '2rem' }
               }}
             >
               Analytics Dashboard
             </Typography>
             <Typography
-              variant="h6"
+              variant="body1"
               sx={{ 
                 color: colors.darkGray,
-                fontSize: { xs: '1rem', sm: '1.125rem' },
-                maxWidth: '800px'
+                fontSize: '0.9375rem'
               }}
             >
               Comprehensive security incident analytics and performance insights
             </Typography>
           </Box>
 
-          {/* Controls Row - Centered with proper spacing */}
+          {/* Controls Row */}
           <Box sx={{ 
-            mb: 4,
-            maxWidth: '1200px',
-            mx: 'auto'
+            mb: 3
           }}>
             <Stack 
               direction={{ xs: 'column', sm: 'row' }} 
               alignItems={{ xs: 'stretch', sm: 'center' }}
               justifyContent="space-between"
-              spacing={3}
-              sx={{ mb: 3 }}
+              spacing={2}
+              sx={{ mb: 2 }}
             >
               {/* Left side: Time Range and View Incidents */}
               <Stack 
@@ -643,12 +632,13 @@ const AnalyticsDashboard = () => {
                 alignItems={{ xs: 'stretch', sm: 'center' }}
                 sx={{ flex: 1 }}
               >
-                <FormControl size="medium" sx={{ minWidth: 180 }}>
+                <FormControl size="small" sx={{ minWidth: 160 }}>
                   <InputLabel>Time Range</InputLabel>
                   <Select
                     value={timeRange}
                     label="Time Range"
                     onChange={(e) => setTimeRange(e.target.value)}
+                    size="small"
                   >
                     <MenuItem value="week">Last 7 Days</MenuItem>
                     <MenuItem value="month">Last 30 Days</MenuItem>
@@ -658,14 +648,14 @@ const AnalyticsDashboard = () => {
 
                 <Button
                   variant="outlined"
-                  startIcon={<Eye size={20} />}
+                  startIcon={<Eye size={18} />}
                   onClick={() => navigate('/admin/incidents')}
                   sx={{
                     borderColor: colors.borderGray,
                     color: colors.darkBlue,
-                    fontSize: '0.9375rem',
-                    py: 1.25,
-                    px: 3,
+                    fontSize: '0.875rem',
+                    py: 0.75,
+                    px: 2.5,
                     '&:hover': {
                       borderColor: colors.blue,
                       backgroundColor: safeAlpha(colors.blue, 0.04)
@@ -681,109 +671,104 @@ const AnalyticsDashboard = () => {
                 onClick={fetchAnalyticsData}
                 sx={{
                   border: `1px solid ${colors.borderGray}`,
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   backgroundColor: colors.white,
-                  width: 48,
-                  height: 48,
+                  width: 40,
+                  height: 40,
                   '&:hover': {
                     backgroundColor: safeAlpha(colors.blue, 0.05),
                     borderColor: colors.blue
                   }
                 }}
               >
-                <RefreshCw size={22} />
+                <RefreshCw size={18} />
               </IconButton>
             </Stack>
             
             <Divider sx={{ 
-              borderColor: colors.borderGray,
-              maxWidth: '1200px',
-              mx: 'auto'
+              borderColor: colors.borderGray
             }} />
           </Box>
         </Box>
 
-        {/* Summary Stats - Centered grid with larger cards */}
-        <Grid container spacing={4} sx={{ 
-          mb: 5,
-          maxWidth: '1400px',
-          mx: 'auto'
-        }}>
+        {/* Summary Stats - Wider and shorter cards */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
           {statsCards.map((card, index) => (
             <Grid item xs={12} sm={6} lg={3} key={index}>
               <Card sx={{
-                borderRadius: 3,
+                borderRadius: 2,
                 border: `1px solid ${colors.borderGray}`,
                 backgroundColor: colors.white,
                 height: '100%',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                width: '500',
+                minHeight: 120, // Reduced height
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                 '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
                   borderColor: safeAlpha(card.color, 0.4)
                 }
               }}>
-                <CardContent sx={{ p: 3.5 }}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 3 }}>
+                <CardContent sx={{ p: 2.5, height: '100%',width:300 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
                     <Box
                       sx={{
-                        p: 2,
-                        borderRadius: 2.5,
-                        backgroundColor: safeAlpha(card.color, 0.12),
-                        color: card.color
+                        p: 1.5,
+                        borderRadius: 2,
+                        backgroundColor: safeAlpha(card.color, 0.1),
+                        color: card.color,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                       }}
                     >
                       {card.icon}
                     </Box>
                     <Chip
                       label={card.trend}
-                      size="medium"
-                      icon={card.trendIcon}
+                      size="small"
                       sx={{
-                        backgroundColor: safeAlpha(card.trendColor, 0.15),
+                        backgroundColor: safeAlpha(card.trendColor, 0.12),
                         color: card.trendColor,
-                        fontWeight: 700,
-                        fontSize: '0.875rem',
-                        height: 32,
-                        '& .MuiChip-icon': {
-                          ml: 0.5,
-                          mr: 0.5
-                        }
+                        fontWeight: 600,
+                        fontSize: '0.6875rem',
+                        height: 24
                       }}
                     />
                   </Stack>
                   
                   <Typography
-                    variant="h2"
+                    variant="h3"
                     sx={{
                       fontWeight: 800,
                       color: colors.darkBlue,
-                      mb: 1,
-                      fontSize: { xs: '2.5rem', sm: '2.75rem' }
+                      mb: 0.5,
+                      fontSize: { xs: '1.75rem', sm: '1.875rem' },
+                      lineHeight: 1.2
                     }}
                   >
-                    {formatNumber(card.value)}
+                    {card.value.toLocaleString()}
                   </Typography>
                   
                   <Typography
-                    variant="h6"
+                    variant="subtitle1"
                     sx={{
-                      fontWeight: 700,
+                      fontWeight: 600,
                       color: colors.darkBlue,
-                      mb: 1.5,
-                      fontSize: '1.125rem'
+                      mb: 0.5,
+                      fontSize: '0.9375rem'
                     }}
                   >
                     {card.title}
                   </Typography>
                   
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     sx={{
                       color: colors.darkGray,
-                      fontSize: '0.875rem',
-                      lineHeight: 1.5
+                      fontSize: '0.75rem',
+                      lineHeight: 1.4
                     }}
                   >
                     {card.description}
@@ -794,168 +779,181 @@ const AnalyticsDashboard = () => {
           ))}
         </Grid>
 
-        {/* Charts Section - Centered and larger */}
-        <Box sx={{ 
-          maxWidth: '1400px',
-          mx: 'auto',
-          mb: 5
-        }}>
-          <Grid container spacing={4}>
-            {/* Main Chart */}
+        {/* Charts Section - Wider layout */}
+        <Box sx={{ mb: 4 }}>
+          <Grid container spacing={3}>
+            {/* Main Chart - Wider */}
             <Grid item xs={12} lg={8}>
               <Card sx={{
-                borderRadius: 3,
+                borderRadius: 2,
                 border: `1px solid ${colors.borderGray}`,
                 backgroundColor: colors.white,
                 overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+                boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+                }
               }}>
-                <CardContent sx={{ p: 4 }}>
-                  <Box sx={{ mb: 4 }}>
+                <CardContent sx={{ p: 3, width: 600 }}>
+                  <Box sx={{ mb: 3 }}>
                     <Typography variant="h5" sx={{ 
-                      fontWeight: 800, 
+                      fontWeight: 700, 
                       color: colors.darkBlue,
-                      fontSize: '1.5rem',
-                      mb: 1
+                      fontSize: '1.25rem',
+                      mb: 0.5
                     }}>
                       Incident Trends
                     </Typography>
-                    <Typography variant="body1" sx={{ 
+                    <Typography variant="body2" sx={{ 
                       color: colors.darkGray,
-                      fontSize: '0.9375rem'
+                      fontSize: '0.875rem'
                     }}>
                       {timeRange === 'week' ? 'Daily' : timeRange === 'month' ? 'Weekly' : 'Monthly'} breakdown of incident status
                     </Typography>
                   </Box>
 
                   {loading ? (
-                    <Box sx={{ height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Typography variant="h6" sx={{ color: colors.darkGray }}>
+                    <Box sx={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Typography variant="body1" sx={{ color: colors.darkGray }}>
                         Loading trend data...
                       </Typography>
                     </Box>
                   ) : (
                     <ProfessionalBarChart 
                       data={analyticsData.trendData || []} 
-                      height={420}
+                      height={340}
                     />
                   )}
                 </CardContent>
               </Card>
             </Grid>
 
-            {/* Status Distribution */}
+            {/* Status Distribution - Wider */}
             <Grid item xs={12} lg={4}>
               <StatusDistributionCard data={analyticsData.stats} />
             </Grid>
           </Grid>
         </Box>
 
-        {/* Performance Metrics - Centered and larger */}
-        <Box sx={{ 
-          maxWidth: '1400px',
-          mx: 'auto',
-          mb: 5
-        }}>
+        {/* Performance Metrics - Compact cards */}
+        <Box sx={{ mb: 4 }}>
           <Card sx={{
-            borderRadius: 3,
+            borderRadius: 2,
             border: `1px solid ${colors.borderGray}`,
             backgroundColor: colors.white,
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+            boxShadow: '0 2px 12px rgba(0,0,0,0.05)'
           }}>
-            <CardContent sx={{ p: 4 }}>
+            <CardContent sx={{ p: 3 }}>
               <Typography variant="h5" sx={{ 
-                fontWeight: 800, 
+                fontWeight: 700, 
                 color: colors.darkBlue, 
-                mb: 4,
-                fontSize: '1.5rem'
+                mb: 3,
+                fontSize: '1.25rem'
               }}>
                 Performance Metrics
               </Typography>
               
-              <Grid container spacing={4}>
+              <Grid container spacing={2}>
                 {[
                   {
-                    title: 'Avg. Resolution Time',
+                    title: 'Avg. Resolution',
                     value: `${analyticsData.stats.avgResolutionTime || '0.0'} days`,
                     color: colors.blue,
                     trend: '-0.3 days',
-                    icon: <Clock size={24} />
+                    icon: <Clock size={18} />,
+                    description: 'Average time to resolve'
                   },
                   {
-                    title: 'Satisfaction Rate',
+                    title: 'Satisfaction',
                     value: `${analyticsData.stats.satisfactionRate || 0}%`,
                     color: colors.success,
                     trend: '+2.4%',
-                    icon: <CheckCircle size={24} />
+                    icon: <CheckCircle size={18} />,
+                    description: 'User satisfaction rate'
                   },
                   {
                     title: 'Resolution Rate',
                     value: `${analyticsData.stats.percentageResolved || 0}%`,
                     color: colors.success,
                     trend: '+3.8%',
-                    icon: <TrendingUp size={24} />
+                    icon: <TrendingUp size={18} />,
+                    description: 'Cases successfully resolved'
                   },
                   {
                     title: 'First Response',
                     value: '24.7 hours',
                     color: colors.info,
                     trend: '-1.2 hours',
-                    icon: <AlertCircle size={24} />
+                    icon: <AlertCircle size={18} />,
+                    description: 'Average first response time'
                   }
                 ].map((metric, index) => (
                   <Grid item xs={12} sm={6} lg={3} key={index}>
                     <Box sx={{ 
-                      p: 3.5, 
-                      borderRadius: 3,
-                      border: `1px solid ${safeAlpha(metric.color, 0.25)}`,
-                      backgroundColor: safeAlpha(metric.color, 0.08),
+                      p: 2, 
+                      borderRadius: 1.5,
+                      border: `1px solid ${safeAlpha(metric.color, 0.2)}`,
+                      background: `linear-gradient(135deg, ${safeAlpha(metric.color, 0.08)} 0%, ${safeAlpha(metric.color, 0.04)} 100%)`,
                       height: '100%',
                       transition: 'all 0.3s ease',
                       '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 6px 16px rgba(0,0,0,0.1)',
-                        backgroundColor: safeAlpha(metric.color, 0.12)
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                        background: `linear-gradient(135deg, ${safeAlpha(metric.color, 0.12)} 0%, ${safeAlpha(metric.color, 0.08)} 100%)`
                       }
                     }}>
-                      <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2.5 }}>
+                      <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 1.5 }}>
                         <Box sx={{
-                          p: 1.5,
-                          borderRadius: 2,
+                          p: 1,
+                          borderRadius: 1,
                           backgroundColor: safeAlpha(metric.color, 0.15),
-                          color: metric.color
+                          color: metric.color,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
                         }}>
                           {metric.icon}
                         </Box>
-                        <Typography variant="h6" sx={{ 
+                        <Typography variant="subtitle2" sx={{ 
                           color: colors.darkBlue, 
-                          fontWeight: 700,
-                          fontSize: '1rem'
+                          fontWeight: 600,
+                          fontSize: '0.875rem'
                         }}>
                           {metric.title}
                         </Typography>
                       </Stack>
                       
-                      <Typography variant="h2" sx={{ 
+                      <Typography variant="h3" sx={{ 
                         fontWeight: 800, 
                         color: metric.color, 
-                        mb: 2,
-                        fontSize: '2.5rem'
+                        mb: 1,
+                        fontSize: '1.5rem',
+                        lineHeight: 1.2
                       }}>
                         {metric.value}
                       </Typography>
                       
-                      <Chip
-                        label={metric.trend}
-                        size="medium"
-                        sx={{
-                          backgroundColor: safeAlpha(colors.success, 0.15),
-                          color: colors.success,
-                          fontWeight: 700,
-                          fontSize: '0.875rem',
-                          height: 32
-                        }}
-                      />
+                      <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography variant="caption" sx={{ 
+                          color: colors.darkGray,
+                          fontSize: '0.6875rem',
+                          fontWeight: 500
+                        }}>
+                          {metric.description}
+                        </Typography>
+                        <Chip
+                          label={metric.trend}
+                          size="small"
+                          sx={{
+                            backgroundColor: safeAlpha(colors.success, 0.12),
+                            color: colors.success,
+                            fontWeight: 600,
+                            fontSize: '0.625rem',
+                            height: 20
+                          }}
+                        />
+                      </Stack>
                     </Box>
                   </Grid>
                 ))}
@@ -964,24 +962,22 @@ const AnalyticsDashboard = () => {
           </Card>
         </Box>
 
-        {/* Footer - Centered */}
+        {/* Footer */}
         <Box sx={{
-          mt: 6,
-          pt: 4,
+          mt: 4,
+          pt: 3,
           borderTop: `1px solid ${colors.borderGray}`,
-          maxWidth: '1400px',
-          mx: 'auto',
           textAlign: 'center'
         }}>
-          <Typography variant="body1" sx={{ 
+          <Typography variant="body2" sx={{ 
             color: colors.darkGray, 
-            fontSize: '0.9375rem',
+            fontSize: '0.8125rem',
             fontWeight: 500
           }}>
             Last updated: {new Date().toLocaleDateString('en-US', {
-              weekday: 'long',
+              weekday: 'short',
               year: 'numeric',
-              month: 'long',
+              month: 'short',
               day: 'numeric',
               hour: '2-digit',
               minute: '2-digit'
