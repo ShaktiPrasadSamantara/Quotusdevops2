@@ -34,7 +34,7 @@ const StaffDashboard = () => {
   useEffect(() => {
     const fetchAssignedIncidents = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/incidents', {
+        const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
           headers: { Authorization: `Bearer ${token}` },
         });
 

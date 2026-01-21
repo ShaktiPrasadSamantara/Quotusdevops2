@@ -89,8 +89,8 @@ const UserManagement = () => {
     setLoading(true);
     try {
       let url = '';
-      if (selectedRole === 'staff') url = 'http://localhost:5000/api/auth/staff';
-      else if (selectedRole === 'student') url = 'http://localhost:5000/api/auth/students';
+      if (selectedRole === 'staff') url = 'http://13.205.179.91:5000/api/auth/staff';
+      else if (selectedRole === 'student') url = 'http://13.205.179.91:5000/api/auth/students';
 
       const res = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` }
@@ -176,7 +176,7 @@ const UserManagement = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5000/api/auth/users/${selectedUser._id}`,
+        `http://13.205.179.91:5000/api/auth/users/${selectedUser._id}`,
         editForm,
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -205,7 +205,7 @@ const UserManagement = () => {
     setDeleting(true);
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/auth/users/${selectedUser._id}`,
+        `http://13.205.179.91:5000/api/auth/users/${selectedUser._id}`,
         {
           headers: { Authorization: `Bearer ${token}` }
         }
