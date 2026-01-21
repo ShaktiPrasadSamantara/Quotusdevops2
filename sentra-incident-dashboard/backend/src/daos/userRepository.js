@@ -16,11 +16,11 @@ class UserRepository {
   }
 
   async findByRole(role) {
-  return await User.find({ role })
-    .select('_id name email role')
-    .sort({ name: 1 })
-    .exec();
-}
+    return await User.find({ role })
+      .select('_id name email role')
+      .sort({ name: 1 })
+      .exec();
+  }
 
   /**
    * Find user by ID (without password by default)
@@ -48,16 +48,44 @@ class UserRepository {
   }
 
   /**
-   * Check if email already exists
-   * @param {string} email
-   * @returns {Promise<boolean>}
+   * Update user by ID
+   * @param {string} id
+   * @param {Object} updateData
+   * @returns {Promise<User|null>}
    */
-  async existsByEmail(email) {
-    return !!(await User.exists({ email }));
+  async updateById(id, updateData) {
+    // Remove password from updateData if present (password updates should be separate)
+    const { password, ...safeUpdateData } = updateData;
+    
+    return await User.findByIdAndUpdate(
+      id,
+      { $set: safeUpdateData },
+      { new: true, runValidators: true }
+    ).select('-password');
   }
 
-  // You can add more methods later, e.g.:
-  // updateById(id, data), deleteById(id), findAll(), etc.
+  /**
+   * Delete user by ID
+   * @param {string} id
+   * @returns {Promise<Object>} Deletion result
+   */
+  async deleteById(id) {
+    return await User.findByIdAndDelete(id);
+  }
+
+  /**
+   * Check if email already exists (excluding current user)
+   * @param {string} email
+   * @param {string} excludeUserId - User ID to exclude from check
+   * @returns {Promise<boolean>}
+   */
+  async existsByEmail(email, excludeUserId = null) {
+    const query = { email };
+    if (excludeUserId) {
+      query._id = { $ne: excludeUserId };
+    }
+    return !!(await User.exists(query));
+  }
 }
 
-module.exports = new UserRepository();  
+module.exports = new UserRepository();

@@ -43,6 +43,70 @@ class AuthService {
     return user;
   }
 
+  /**
+   * Update user profile
+   * @param {string} userId - User ID to update
+   * @param {Object} updateData - Data to update (name, email)
+   * @returns {Promise<Object>} Updated user
+   */
+  async updateUser(userId, updateData) {
+    const { name, email } = updateData;
+
+    // Check if user exists
+    const existingUser = await userRepository.findById(userId);
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+
+    // If email is being changed, check if new email already exists
+    if (email && email !== existingUser.email) {
+      const emailExists = await userRepository.existsByEmail(email, userId);
+      if (emailExists) {
+        throw new Error('Email already in use');
+      }
+    }
+
+    // Prepare update data
+    const updateFields = {};
+    if (name !== undefined) updateFields.name = name;
+    if (email !== undefined) updateFields.email = email;
+
+    // Update user
+    const updatedUser = await userRepository.updateById(userId, updateFields);
+    if (!updatedUser) {
+      throw new Error('Failed to update user');
+    }
+
+    return updatedUser;
+  }
+
+  /**
+   * Delete user by ID
+   * @param {string} userId - User ID to delete
+   * @returns {Promise<Object>} Deletion result
+   */
+  async deleteUser(userId) {
+    // Check if user exists
+    const existingUser = await userRepository.findById(userId);
+    if (!existingUser) {
+      throw new Error('User not found');
+    }
+
+    // Prevent self-deletion (admin can't delete themselves)
+    // You can add this check if needed
+    // if (userId === currentUserId) {
+    //   throw new Error('Cannot delete your own account');
+    // }
+
+    // Delete user
+    const result = await userRepository.deleteById(userId);
+    if (!result) {
+      throw new Error('Failed to delete user');
+    }
+
+    return { message: 'User deleted successfully' };
+  }
+
   // Helper - formats response (same for register & login)
   _formatUserWithToken(user) {
     return {
