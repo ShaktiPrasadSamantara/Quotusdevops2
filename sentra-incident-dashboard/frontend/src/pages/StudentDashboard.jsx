@@ -35,7 +35,7 @@ const StudentDashboard = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6">Awareness Hub</Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
@@ -45,7 +45,7 @@ const StudentDashboard = () => {
               Open Awareness Hub
             </Button>
           </Paper>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

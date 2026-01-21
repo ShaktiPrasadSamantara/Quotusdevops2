@@ -426,7 +426,7 @@ const AnalyticsDashboard = () => {
       const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const incidentsData = res.data || [];
+      const incidentsData = res.data.data || [];
       
       const total = incidentsData.length;
       const pending = incidentsData.filter((i) => i.status === 'Pending').length;

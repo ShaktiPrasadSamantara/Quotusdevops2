@@ -1,43 +1,70 @@
-const incidentRepository = require('../daos/incidentRepository'); // ← note: you had '../daos/' before — use consistent path
+const incidentRepository = require('../daos/incidentRepository');
 const { generateReferenceId } = require('../utils/incidentUtils');
+const path = require('path');
 
 class IncidentService {
   /**
-   * Create a new incident report
+   * Create a new incident report with file uploads
    * @param {Object} user - Authenticated user from middleware
    * @param {Object} data - Request body
+   * @param {Array} files - Uploaded files
    */
-  async createIncident(user, data) {
+  async createIncident(user, data, files) {
     const {
       title,
       description,
+      type, // Add this line
       category,
       location,
       incidentDate,
       isAnonymous = false,
       priority = 'Medium',
+      fileComments = [],
     } = data;
 
-    if (!title || !description || !category) {
-      throw new Error('Title, description, and category are required');
+    if (!title || !description || !type || !category) {
+      throw new Error('Title, description, type, and category are required'); // Update error message
     }
+
+    // Parse category if it's a string
+    let categoryArray = category;
+    if (typeof category === 'string') {
+      try {
+        categoryArray = JSON.parse(category);
+      } catch (e) {
+        categoryArray = category.split(',').map(c => c.trim());
+      }
+    }
+
+    // Process uploaded files
+    const attachments = files ? files.map((file, index) => ({
+      fileName: file.originalname,
+      filePath: file.path,
+      fileUrl: `/api/uploads/${path.basename(file.path)}`,
+      fileSize: file.size,
+      fileType: file.mimetype,
+      comment: fileComments[index] || '',
+      uploadedAt: new Date()
+    })) : [];
 
     const incident = await incidentRepository.create({
       referenceId: generateReferenceId(),
       title,
       description,
-      category,
+      type, // Add this line
+      category: categoryArray,
       location,
-      incidentDate: incidentDate ? new Date(incidentDate) : undefined,
+      incidentDate: incidentDate ? new Date(incidentDate) : new Date(),
       isAnonymous: !!isAnonymous,
       reporter: isAnonymous ? null : user._id,
       priority,
+      attachments,
       status: 'Pending',
       history: [
         {
           status: 'Pending',
           changedBy: user._id,
-          note: 'Incident created',
+          note: 'Incident created' + (attachments.length > 0 ? ` with ${attachments.length} attachment(s)` : ''),
         },
       ],
     });
@@ -132,27 +159,28 @@ class IncidentService {
    * Assign incident to a staff member (admin only)
    */
   async assignIncident(incidentId, userId, { assignedTo }) {
-  if (!assignedTo) {
-    throw new Error('assignedTo (staff user ID) is required');
+    if (!assignedTo) {
+      throw new Error('assignedTo (staff user ID) is required');
+    }
+
+    console.log(`[ASSIGN] Assigning incident ${incidentId} to user ID: ${assignedTo}`);
+
+    const historyEntry = {
+      status: 'Pending',
+      changedBy: userId,
+      note: 'Incident assigned to staff member',
+    };
+
+    const updated = await incidentRepository.assignTo(incidentId, assignedTo, historyEntry);
+
+    if (!updated) {
+      throw new Error('Incident not found or could not be assigned');
+    }
+
+    console.log(`[ASSIGN SUCCESS] AssignedTo now: ${updated.assignedTo?.toString()}`);
+
+    return updated;
   }
-
-  console.log(`[ASSIGN] Assigning incident ${incidentId} to user ID: ${assignedTo}`);
-
-  const historyEntry = {
-    status: 'Pending',
-    changedBy: userId,
-    note: 'Incident assigned to staff member',
-  };
-
-  const updated = await incidentRepository.assignTo(incidentId, assignedTo, historyEntry);
-
-  if (!updated) {
-    throw new Error('Incident not found or could not be assigned');
-  }
-
-  console.log(`[ASSIGN SUCCESS] AssignedTo now: ${updated.assignedTo?.toString()}`);
-
-  return updated;
 }
-}
+
 module.exports = new IncidentService();

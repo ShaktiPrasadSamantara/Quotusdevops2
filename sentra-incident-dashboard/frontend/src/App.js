@@ -14,12 +14,12 @@ import AdminIncidentsPage from './pages/AdminIncidentsPage';
 import AwarenessHubPage from './pages/AwarenessHubPage';
 import Navbar from './components/layout/Navbar';
 import getTheme from './theme';
-import UserCreationForm from './pages/userCreate'; 
+import UserCreationForm from './pages/userCreate';
 import AdminCreationForm from './pages/adminCreation';
-// import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import AnalyticsDashboard from './pages/AnalyticsDasboard';
 import UserManagement from './pages/UserManagement';
-
+import IncidentDetailPage from './pages/IncidentDetailPage';
+import EditIncidentPage from './pages/EditIncidentPage';
 
 function App() {
   const [mode, setMode] = useState('light');
@@ -65,6 +65,26 @@ function App() {
               }
             />
 
+            {/* Add this route for student incident detail */}
+            <Route
+              path="/student/incidents/:id"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <IncidentDetailPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Add this route for student incident edit */}
+            <Route
+              path="/student/incidents/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <EditIncidentPage />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/staff"
               element={
@@ -74,11 +94,31 @@ function App() {
               }
             />
 
+            {/* Add these routes for staff incident detail */}
+            <Route
+              path="/staff/incidents/:id"
+              element={
+                <ProtectedRoute allowedRoles={['staff']}>
+                  <IncidentDetailPage />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/admin"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Add these routes for admin incident detail */}
+            <Route
+              path="/admin/incidents/:id"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <IncidentDetailPage />
                 </ProtectedRoute>
               }
             />
@@ -101,31 +141,93 @@ function App() {
               }
             />
 
-            // In your App.js or router configuration
-            <Route path="/user-creation" element={
-              <ProtectedRoute allowedRoles={['admin']}>
-                <UserCreationForm />
-              </ProtectedRoute>
-            } />
+            <Route
+              path="/user-creation"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <UserCreationForm />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AnalyticsDashboard />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/user-management"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin-creation"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminCreationForm />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Generic incident detail route (for backward compatibility) */}
+            <Route
+              path="/incidents/:id"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'staff', 'admin']}>
+                  <IncidentDetailPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Generic incident edit route */}
+            <Route
+              path="/incidents/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <EditIncidentPage />
+                </ProtectedRoute>
+              }
+            />
 
 
-            <Route path="/analytics" element={
-              
-                <AnalyticsDashboard/>
-             
-            } />
-            <Route path="/user-management" element={
-              
-                <UserManagement/>
-             
-            } />
+            <Route
+              path="/student/my-incidents"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <MyIncidentsPage />
+                </ProtectedRoute>
+              }
+            />
 
-            <Route path="/admin-creation" element={
-             
-                <AdminCreationForm/>
-           
-            } />
+            {/* Add this route for incident details */}
+            <Route
+              path="/incidents/:id"
+              element={
+                <ProtectedRoute allowedRoles={['student', 'staff', 'admin']}>
+                  <IncidentDetailPage />
+                </ProtectedRoute>
+              }
+            />
 
+            {/* Add this route for editing incidents */}
+            <Route
+              path="/incidents/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <EditIncidentPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>

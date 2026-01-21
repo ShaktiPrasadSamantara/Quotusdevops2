@@ -21,8 +21,8 @@ const AwarenessHubPage = () => {
   useEffect(() => {
     const fetchAwareness = async () => {
       try {
-        const res = await axios.get('http://13.205.179.91:5000/api/awareness');
-        setItems(res.data);
+        const res = await axios.get('http://localhost:5000/api/awareness');
+        setItems(res.data.data);
       } catch (error) {
         console.error('Error fetching awareness', error.message);
       }

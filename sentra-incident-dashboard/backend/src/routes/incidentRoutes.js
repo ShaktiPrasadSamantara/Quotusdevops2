@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../middleware/uploadMiddleware');
 
 const {
   createIncident,
@@ -10,10 +11,23 @@ const {
   assignIncident,
 } = require('../controllers/incidentController');
 
+
+
+const {
+  getIncidentHistory,
+  updateIncidentDetails,
+  getIncidentComments
+} = require('../controllers/incidentExtraController');
+
+
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-// Create incident (authenticated users: student/staff)
-router.post('/', protect, createIncident);
+// Create incident with file uploads
+router.post('/', 
+  protect,
+  upload.array('files', 5), // Accept up to 5 files with field name 'files'
+  createIncident
+);
 
 // Get own reported incidents (student/staff)
 router.get('/my', protect, getMyIncidents);
@@ -29,5 +43,16 @@ router.patch('/:id/status', protect, authorize('staff', 'admin'), updateIncident
 
 // Assign to staff (admin only)
 router.patch('/:id/assign', protect, authorize('admin'), assignIncident);
+
+
+// Get incident history
+router.get('/:id/history', protect, getIncidentHistory);
+
+// Update incident details (for reporter)
+router.put('/:id', protect, updateIncidentDetails);
+
+// Get comments (if implemented)
+router.get('/:id/comments', protect, getIncidentComments);
+
 
 module.exports = router;

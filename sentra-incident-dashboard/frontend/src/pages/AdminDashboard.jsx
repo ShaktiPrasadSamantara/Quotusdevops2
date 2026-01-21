@@ -115,7 +115,7 @@ const AdminDashboard = () => {
       const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const incidents = res.data;
+      const incidents = res.data.data;
 
       console.log("admin Token", token);
 
