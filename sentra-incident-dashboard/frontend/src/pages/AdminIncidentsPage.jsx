@@ -70,7 +70,7 @@ const AdminIncidentsPage = () => {
         headers: { Authorization: `Bearer ${token}` },
         params: filters,
       });
-      setIncidents(res.data);
+      setIncidents(res.data.data);
     } catch (error) {
       console.error('Error fetching incidents', error.message);
     }
@@ -89,7 +89,7 @@ const AdminIncidentsPage = () => {
       const res = await axios.get('http://localhost:5000/api/auth/staff', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('Fetched real staff:', res.data);
+      // console.log('Fetched real staff:', res.data);
       setStaffUsers(res.data);
     } catch (err) {
       console.error('Failed to fetch staff users:', err.response?.data || err);

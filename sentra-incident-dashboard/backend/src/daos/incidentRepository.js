@@ -20,7 +20,8 @@ class IncidentRepository {
       ]
     })
       .sort({ createdAt: -1 })
-      .select('-history')
+      .populate('reporter', 'name email role')
+      .populate('assignedTo', 'name email role')
       .exec();
   }
 
@@ -54,23 +55,37 @@ class IncidentRepository {
     ).exec();
   }
 
-
-  // repositories/incidentRepository.js
-
-async findByAssignedTo(userId) {
-  return await Incident.find({ assignedTo: userId })
-    .sort({ createdAt: -1 })
-    .populate('reporter', 'name email role')
-    .populate('assignedTo', 'name email role')
-    .exec();
-}
-
+  async findByAssignedTo(userId) {
+    return await Incident.find({ assignedTo: userId })
+      .sort({ createdAt: -1 })
+      .populate('reporter', 'name email role')
+      .populate('assignedTo', 'name email role')
+      .exec();
+  }
 
   async existsById(id) {
     return !!(await Incident.countDocuments({ _id: id }));
   }
 
-  // Add later if needed: findByReferenceId, addAttachment, etc.
+  async addAttachment(incidentId, attachment) {
+    return await Incident.findByIdAndUpdate(
+      incidentId,
+      {
+        $push: { attachments: attachment }
+      },
+      { new: true }
+    ).exec();
+  }
+
+  async removeAttachment(incidentId, attachmentId) {
+    return await Incident.findByIdAndUpdate(
+      incidentId,
+      {
+        $pull: { attachments: { _id: attachmentId } }
+      },
+      { new: true }
+    ).exec();
+  }
 }
 
 module.exports = new IncidentRepository();

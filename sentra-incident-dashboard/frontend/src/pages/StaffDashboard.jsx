@@ -140,7 +140,7 @@ const StaffDashboard = () => {
       <Container maxWidth="lg" sx={{ mt: 3, mb: 3, px: 3 }}>
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           <Typography variant="h4" gutterBottom fontWeight="bold">
-            Staff Dashboard
+            Owner Dashboard
           </Typography>
           <Typography variant="body2" color="text.secondary" mb={3}>
             View and manage incidents assigned to you by the admin.
@@ -236,7 +236,7 @@ const StaffDashboard = () => {
           fontWeight="bold"
           sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}
         >
-          Staff Dashboard - Assigned Incidents
+          Owner Dashboard - Assigned Incidents
         </Typography>
         <Typography 
           variant="body2" 

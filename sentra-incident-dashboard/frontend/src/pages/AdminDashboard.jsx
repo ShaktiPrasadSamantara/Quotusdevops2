@@ -115,7 +115,7 @@ const AdminDashboard = () => {
       const res = await axios.get('http://localhost:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const incidents = res.data;
+      const incidents = res.data.data;
 
       console.log("admin Token", token);
 
