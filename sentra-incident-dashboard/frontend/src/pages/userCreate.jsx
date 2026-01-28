@@ -145,7 +145,7 @@ const UserCreationForm = ({ onToggleMode, mode }) => {
     setErrorMessage('');
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch('http://13.205.179.91:5000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -101,7 +101,7 @@ const EditIncidentPage = () => {
     try {
       setLoading(true);
       setError('');
-      const res = await axios.get(`http://localhost:5000/api/incidents/${id}`, {
+      const res = await axios.get(`http://13.205.179.91:5000/api/incidents/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -225,7 +225,7 @@ const EditIncidentPage = () => {
       };
 
       const response = await axios.put(
-        `http://localhost:5000/api/incidents/${id}`,
+        `http://13.205.179.91:5000/api/incidents/${id}`,
         dataToSend,
         {
           headers: { 

@@ -55,7 +55,7 @@ const IncidentDetailsDialog = ({ open, onClose, incident }) => {
     
     // If the URL starts with /api/uploads, prepend the backend URL
     if (fileUrl.startsWith('/api/')) {
-      fullUrl = `http://localhost:5000${fileUrl}`;
+      fullUrl = `http://13.205.179.91:5000${fileUrl}`;
     }
     
     // Open the file in a new tab
@@ -355,7 +355,7 @@ const StaffDashboard = () => {
   useEffect(() => {
     const fetchAssignedIncidents = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/incidents', {
+        const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setIncidents(res.data.data || []);

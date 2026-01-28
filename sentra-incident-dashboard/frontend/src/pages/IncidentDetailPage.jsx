@@ -67,7 +67,7 @@ const IncidentDetailPage = () => {
         try {
             setLoading(true);
             setError('');
-            const res = await axios.get(`http://localhost:5000/api/incidents/${id}`, {
+            const res = await axios.get(`http://13.205.179.91:5000/api/incidents/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             console.log('Incident data:', res.data.data); // Debug log
@@ -82,7 +82,7 @@ const IncidentDetailPage = () => {
 
     const fetchIncidentHistory = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/incidents/${id}/history`, {
+            const res = await axios.get(`http://13.205.179.91:5000/api/incidents/${id}/history`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setHistory(res.data.data);
@@ -93,7 +93,7 @@ const IncidentDetailPage = () => {
 
     const fetchComments = async () => {
         try {
-            const res = await axios.get(`http://localhost:5000/api/incidents/${id}/comments`, {
+            const res = await axios.get(`http://13.205.179.91:5000/api/incidents/${id}/comments`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setComments(res.data.data);
@@ -159,7 +159,7 @@ const IncidentDetailPage = () => {
 
     const downloadAttachment = (attachment) => {
         const link = document.createElement('a');
-        link.href = `http://localhost:5000${attachment.fileUrl}`;
+        link.href = `http://13.205.179.91:5000${attachment.fileUrl}`;
         link.download = attachment.fileName;
         document.body.appendChild(link);
         link.click();
@@ -410,7 +410,7 @@ const IncidentDetailPage = () => {
                                                         <Button
                                                             size="small"
                                                             startIcon={<Visibility />}
-                                                            onClick={() => window.open(`http://localhost:5000${file.fileUrl}`, '_blank')}
+                                                            onClick={() => window.open(`http://13.205.179.91:5000${file.fileUrl}`, '_blank')}
                                                         >
                                                             View
                                                         </Button>
