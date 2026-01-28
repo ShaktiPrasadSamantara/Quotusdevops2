@@ -66,7 +66,7 @@ const AdminIncidentsPage = () => {
 
   const fetchIncidents = async () => {
     try {
-      const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
+      const res = await axios.get('http://localhost:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
         params: filters,
       });
@@ -86,7 +86,7 @@ const AdminIncidentsPage = () => {
   useEffect(() => {
   const fetchStaff = async () => {
     try {
-      const res = await axios.get('http://13.205.179.91:5000/api/auth/staff', {
+      const res = await axios.get('http://localhost:5000/api/auth/staff', {
         headers: { Authorization: `Bearer ${token}` },
       });
       // console.log('Fetched real staff:', res.data);
@@ -126,7 +126,7 @@ const AdminIncidentsPage = () => {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(
-        `http://13.205.179.91:5000/api/incidents/${id}/status`,
+        `http://localhost:5000/api/incidents/${id}/status`,
         { status },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -144,7 +144,7 @@ const AdminIncidentsPage = () => {
       if (!staffId) return;
 
       const response = await axios.patch(
-        `http://13.205.179.91:5000/api/incidents/${incidentId}/assign`,
+        `http://localhost:5000/api/incidents/${incidentId}/assign`,
         { assignedTo: staffId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
