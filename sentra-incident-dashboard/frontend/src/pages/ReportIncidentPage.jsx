@@ -56,7 +56,7 @@ const ReportIncidentPage = () => {
     category: [],
     location: '',
     incidentDate: '',
-    isAnonymous: false,
+    // isAnonymous: false,
     priority: 'Medium',
   });
   const [message, setMessage] = useState('');

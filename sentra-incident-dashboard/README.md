@@ -94,7 +94,7 @@ Run backend:
 npm start
 ```
 
-Backend will run on `http://13.205.179.91:5000`.
+Backend will run on `http://localhost:5000`.
 
 ### 3. Frontend setup
 
@@ -106,7 +106,7 @@ npm install
 npm start
 ```
 
-Frontend will run on `http://13.205.179.91:3000`.
+Frontend will run on `http://localhost:3000`.
 
 ## Default Users (example)
 

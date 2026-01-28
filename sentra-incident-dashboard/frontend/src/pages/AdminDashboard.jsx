@@ -112,7 +112,7 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
+      const res = await axios.get('http://localhost:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const incidents = res.data.data;
@@ -746,7 +746,7 @@ const AdminDashboard = () => {
                     </Typography>
                   </Box>
                   <Stack direction="row" spacing={1} sx={{ mt: { xs: 1, sm: 0 } }}>
-                    <IconButton
+                    {/* <IconButton
                       size="small"
                       sx={{
                         border: `1px solid ${colors.borderGray}`,
@@ -755,7 +755,7 @@ const AdminDashboard = () => {
                       }}
                     >
                       <Filter size={isMobile ? 14 : 16} />
-                    </IconButton>
+                    </IconButton> */}
                     <Button
                       size="small"
                       endIcon={<ChevronRight size={isMobile ? 14 : 16} />}

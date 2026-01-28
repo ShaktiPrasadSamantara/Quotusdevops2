@@ -66,13 +66,18 @@ const AdminIncidentsPage = () => {
 
   const fetchIncidents = async () => {
     try {
-      const res = await axios.get('http://13.205.179.91:5000/api/incidents', {
+      const res = await axios.get('http://localhost:5000/api/incidents', {
         headers: { Authorization: `Bearer ${token}` },
         params: filters,
       });
-      setIncidents(res.data.data);
+
+      // ✅ Check if data exists and is an array
+      const incidentsData = res.data?.data || [];
+      setIncidents(incidentsData);
+
     } catch (error) {
       console.error('Error fetching incidents', error.message);
+      setIncidents([]); // ✅ Set to empty array on error
     }
   };
 
@@ -84,18 +89,18 @@ const AdminIncidentsPage = () => {
   }, [token]);
 
   useEffect(() => {
-  const fetchStaff = async () => {
-    try {
-      const res = await axios.get('http://13.205.179.91:5000/api/auth/staff', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      // console.log('Fetched real staff:', res.data);
-      setStaffUsers(res.data);
-    } catch (err) {
-      console.error('Failed to fetch staff users:', err.response?.data || err);
-      // Optional fallback or show error to admin
-    }
-  };
+    const fetchStaff = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/auth/staff', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // console.log('Fetched real staff:', res.data);
+        setStaffUsers(res.data);
+      } catch (err) {
+        console.error('Failed to fetch staff users:', err.response?.data || err);
+        // Optional fallback or show error to admin
+      }
+    };
 
   if (token) {
     fetchStaff();
@@ -126,7 +131,7 @@ const AdminIncidentsPage = () => {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(
-        `http://13.205.179.91:5000/api/incidents/${id}/status`,
+        `http://localhost:5000/api/incidents/${id}/status`,
         { status },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -144,7 +149,7 @@ const AdminIncidentsPage = () => {
       if (!staffId) return;
 
       const response = await axios.patch(
-        `http://13.205.179.91:5000/api/incidents/${incidentId}/assign`,
+        `http://localhost:5000/api/incidents/${incidentId}/assign`,
         { assignedTo: staffId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -190,7 +195,7 @@ const AdminIncidentsPage = () => {
         </Box>
 
         {/* Search Bar - Always visible */}
-        <Card
+        {/* <Card
           elevation={0}
           sx={{
             mb: 2,
@@ -273,7 +278,7 @@ const AdminIncidentsPage = () => {
               </Grid>
             </Grid>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Filter Section - Collapsible */}
         <Collapse in={showFilters} timeout="auto">
@@ -574,101 +579,112 @@ const AdminIncidentsPage = () => {
             </TableHead>
 
             <TableBody>
-              {incidents.map((inc) => (
-                <TableRow key={inc._id} hover sx={{ '&:last-child td': { borderBottom: 0 } }}>
-                  <TableCell>
-                    <Typography variant="body2" fontWeight={500}>
-                      {inc.referenceId}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{inc.title}</TableCell>
-                  <TableCell>
-                    {inc.isAnonymous || !inc.reporter
-                      ? <Chip label="Anonymous" size="small" variant="outlined" />
-                      : inc.reporter.name}
-                  </TableCell>
-                  <TableCell>
-                    <Chip label={inc.category} size="small" variant="outlined" />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={inc.priority}
-                      size="small"
-                      color={priorityColor(inc.priority)}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={inc.status}
-                      size="small"
-                      color={statusColor(inc.status)}
-                      sx={{ fontWeight: 500 }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    {inc.assignedTo?.name ||
-                      <Typography variant="body2" color="text.secondary" fontStyle="italic">
-                        Not assigned
+              {Array.isArray(incidents) && incidents.length > 0 ? (
+                incidents.map((inc) => (
+                  <TableRow key={inc._id} hover sx={{ '&:last-child td': { borderBottom: 0 } }}>
+                    <TableCell>
+                      <Typography variant="body2" fontWeight={500}>
+                        {inc.referenceId}
                       </Typography>
-                    }
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={() => updateStatus(inc._id, 'In Review')}
-                          sx={{ minWidth: 90 }}
-                        >
-                          In Review
-                        </Button>
+                    </TableCell>
+                    <TableCell>{inc.title}</TableCell>
+                    <TableCell>
+                      {inc.isAnonymous || !inc.reporter
+                        ? <Chip label="Anonymous" size="small" variant="outlined" />
+                        : inc.reporter.name}
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={inc.category} size="small" variant="outlined" />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={inc.priority}
+                        size="small"
+                        color={priorityColor(inc.priority)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={inc.status}
+                        size="small"
+                        color={statusColor(inc.status)}
+                        sx={{ fontWeight: 500 }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      {inc.assignedTo?.name ||
+                        <Typography variant="body2" color="text.secondary" fontStyle="italic">
+                          Not assigned
+                        </Typography>
+                      }
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => updateStatus(inc._id, 'In Review')}
+                            sx={{ minWidth: 90 }}
+                          >
+                            In Review
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            onClick={() => updateStatus(inc._id, 'Resolved')}
+                            sx={{ minWidth: 90 }}
+                          >
+                            Resolve
+                          </Button>
+                        </Box>
+
+                        <FormControl size="small" fullWidth>
+                          <InputLabel>Assign</InputLabel>
+                          <Select
+                            value={selectedStaff[inc._id] || ''}
+                            onChange={(e) =>
+                              setSelectedStaff((prev) => ({
+                                ...prev,
+                                [inc._id]: e.target.value,
+                              }))
+                            }
+                            label="Assign"
+                            sx={{ minWidth: 140 }}
+                          >
+                            <MenuItem value="">None</MenuItem>
+                            {staffUsers.map((s) => (
+                              <MenuItem key={s._id} value={s._id}>
+                                {s.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+
                         <Button
                           size="small"
                           variant="contained"
-                          color="success"
-                          onClick={() => updateStatus(inc._id, 'Resolved')}
-                          sx={{ minWidth: 90 }}
-                        >
-                          Resolve
-                        </Button>
-                      </Box>
-
-                      <FormControl size="small" fullWidth>
-                        <InputLabel>Assign</InputLabel>
-                        <Select
-                          value={selectedStaff[inc._id] || ''}
-                          onChange={(e) =>
-                            setSelectedStaff((prev) => ({
-                              ...prev,
-                              [inc._id]: e.target.value,
-                            }))
-                          }
-                          label="Assign"
+                          disabled={!selectedStaff[inc._id]}
+                          onClick={() => assignIncident(inc._id)}
                           sx={{ minWidth: 140 }}
                         >
-                          <MenuItem value="">None</MenuItem>
-                          {staffUsers.map((s) => (
-                            <MenuItem key={s._id} value={s._id}>
-                              {s.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-
-                      <Button
-                        size="small"
-                        variant="contained"
-                        disabled={!selectedStaff[inc._id]}
-                        onClick={() => assignIncident(inc._id)}
-                        sx={{ minWidth: 140 }}
-                      >
-                        Assign
-                      </Button>
-                    </Box>
-                  </TableCell>
+                          Assign
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))) : (
+                <TableRow>
+                  {/* <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
+                    <Typography variant="body1" color="text.secondary">
+                      {Array.isArray(incidents) && incidents.length === 0
+                        ? 'No incidents found'
+                        : 'Loading incidents...'}
+                    </Typography>
+                  </TableCell> */}
                 </TableRow>
-              ))}
+                 )}
             </TableBody>
           </Table>
         </TableContainer>

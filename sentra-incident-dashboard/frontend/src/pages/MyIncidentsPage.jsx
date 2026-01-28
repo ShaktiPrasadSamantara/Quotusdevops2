@@ -32,14 +32,24 @@ const MyIncidentsPage = () => {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const res = await axios.get('http://13.205.179.91:5000/api/incidents/my', {
+        const res = await axios.get('http://localhost:5000/api/incidents/my', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        console.log('Incidents data from API:', res.data);
+        console.log('First incident details:', res.data[0]);
+
+        if (res.data && res.data.length > 0) {
+          console.log('First incident status:', res.data[0].status);
+          console.log('First incident isAnonymous:', res.data[0].isAnonymous);
+        }
+
         setIncidents(res.data.data);
       } catch (error) {
         console.error('Error fetching incidents', error.message);
+        console.error('Error response:', error.response);
       } finally {
         setLoading(false);
       }
@@ -51,9 +61,9 @@ const MyIncidentsPage = () => {
   }, [token]);
 
   const handleRowClick = (incident) => {
-    console.log('Row clicked, incident:', incident); // Debug log
+    console.log('Row clicked, incident:', incident);
     const incidentId = incident.id || incident._id;
-    console.log('Incident ID:', incidentId); // Debug log
+    console.log('Incident ID:', incidentId);
     if (incidentId) {
       navigate(`/incidents/${incidentId}`);
     } else {
@@ -63,9 +73,9 @@ const MyIncidentsPage = () => {
 
   const handleViewClick = (e, incident) => {
     e.stopPropagation();
-    console.log('View clicked, incident:', incident); // Debug log
+    console.log('View clicked, incident:', incident);
     const incidentId = incident.id || incident._id;
-    console.log('Incident ID:', incidentId); // Debug log
+    console.log('Incident ID:', incidentId);
     if (incidentId) {
       navigate(`/incidents/${incidentId}`);
     } else {
@@ -75,9 +85,9 @@ const MyIncidentsPage = () => {
 
   const handleEditClick = (e, incident) => {
     e.stopPropagation();
-    console.log('Edit clicked, incident:', incident); // Debug log
+    console.log('Edit clicked, incident:', incident);
     const incidentId = incident.id || incident._id;
-    console.log('Incident ID:', incidentId); // Debug log
+    console.log('Incident ID:', incidentId);
     if (incidentId && canEdit(incident)) {
       navigate(`/incidents/${incidentId}/edit`);
     } else {
@@ -85,21 +95,33 @@ const MyIncidentsPage = () => {
     }
   };
 
-  // Check if user can edit incident
-  const canEdit = (incident) => {
-    if (!user || !incident) return false;
-    
-    // Only reporter can edit pending incidents
-    if (incident.status == 'Pending') return false;
-    
-    if (incident.isAnonymous) return false;
-    
-    // Check if current user is the reporter
-    if (incident.reporter && incident.reporter.id) {
-      return incident.reporter.id === user.id;
+  // Simplified canEdit function - only checks if incident is pending
+  // Simplified canEdit function - only checks if incident is pending
+  const canEdit = () => {
+    if (!incidents || !user) {
+      console.log('Cannot edit: No incident or user');
+      return false;
     }
-    
-    return false;
+
+    console.log('Incident status:', incidents.status);
+    console.log('Is anonymous:', incidents.isAnonymous);
+
+    // Only pending incidents can be edited
+    if (incidents.status !== 'Pending') {
+      console.log('Cannot edit: Incident status is not Pending');
+      return false;
+    }
+
+    // COMMENTED OUT: Remove the anonymous check to show edit button for all pending incidents
+    // if (incident.isAnonymous) {
+    //   console.log('Cannot edit: Incident is anonymous');
+    //   return false;
+    // }
+
+    // Don't check reporter here - backend will handle authorization
+    // This allows edit button to show for all pending incidents
+    console.log('Can edit: Incident is pending');
+    return true;
   };
 
   if (loading) {
@@ -125,7 +147,7 @@ const MyIncidentsPage = () => {
             <TableRow>
               <TableCell>Reference ID</TableCell>
               <TableCell>Title</TableCell>
-              <TableCell>Category</TableCell>
+              {/* <TableCell>Category</TableCell> */}
               <TableCell>Priority</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Created At</TableCell>
@@ -144,19 +166,19 @@ const MyIncidentsPage = () => {
             ) : (
               incidents.map((inc) => {
                 const incidentId = inc.id || inc._id;
-                console.log('Rendering incident ID:', incidentId); // Debug log
+                console.log('Rendering incident ID:', incidentId);
                 return (
-                  <TableRow 
-                    key={incidentId} 
-                    hover 
+                  <TableRow
+                    key={incidentId}
+                    hover
                     onClick={() => handleRowClick(inc)}
                     sx={{ cursor: 'pointer', '&:hover': { backgroundColor: '#f5f5f5' } }}
                   >
                     <TableCell>{inc.referenceId}</TableCell>
                     <TableCell>{inc.title}</TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       {Array.isArray(inc.category) ? inc.category.join(', ') : inc.category}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>{inc.priority}</TableCell>
                     <TableCell>
                       <Chip
@@ -177,7 +199,7 @@ const MyIncidentsPage = () => {
                         >
                           <Visibility fontSize="small" />
                         </IconButton>
-                        {canEdit(inc) && (
+                        {canEdit(inc) ? (
                           <IconButton
                             size="small"
                             onClick={(e) => handleEditClick(e, inc)}
@@ -185,6 +207,8 @@ const MyIncidentsPage = () => {
                           >
                             <Edit fontSize="small" />
                           </IconButton>
+                        ) : (
+                          <span style={{ width: 40 }}></span>
                         )}
                       </Box>
                     </TableCell>

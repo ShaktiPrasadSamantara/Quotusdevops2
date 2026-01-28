@@ -33,7 +33,7 @@ const incidentSchema = new mongoose.Schema(
     referenceId: { type: String, required: true, unique: true },
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
-    type: { type: String, enum: typeEnum, required: true }, // Add this line
+    type: { type: String, enum: typeEnum }, // Add this line
     category: { type: [String], required: true },
     location: String,
     incidentDate: Date,
